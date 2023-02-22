@@ -1,6 +1,7 @@
 fetch("https://petlatkea.dk/2021/hogwarts/students.json")
   .then((response) => response.json())
   .then((data) => {
+    // "clean" and trim data
     const cleanData = data.map((item) => {
       const fullname = item.fullname.trim();
       const house = item.house.trim().toLowerCase();
@@ -10,13 +11,14 @@ fetch("https://petlatkea.dk/2021/hogwarts/students.json")
       let middleName = "";
       let nickname = fullname.match(/\"(.*?)\"/)?.[1];
 
+      // fix for when the lastname string is empty
       if (middleAndLastName.length === 0) {
         lastName = "";
       } else {
         lastName = middleAndLastName.pop();
       }
 
-      // remove special characters from the name properties
+      // remove "special" characters from the name properties
       const cleanFirstName = firstName
         .replace(/[^a-zA-Z\-]/g, "")
         .toLowerCase();
