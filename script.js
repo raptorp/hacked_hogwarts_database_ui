@@ -1,24 +1,39 @@
 fetch("https://petlatkea.dk/2021/hogwarts/students.json")
   .then((response) => response.json())
   .then((data) => {
-    // "clean" and trim data
+    // "clean" and trim the data
     const cleanData = data.map((item) => {
       const fullname = item.fullname.trim();
       const house = item.house.trim().toLowerCase();
       const gender = item.gender.trim().toLowerCase();
-      const [firstName, ...middleAndLastName] = fullname.split(" ");
+      let firstName = "";
       let lastName = "";
       let middleName = "";
       let nickname = fullname.match(/\"(.*?)\"/)?.[1];
 
-      // fix for when the lastname string is empty
-      if (middleAndLastName.length === 0) {
-        lastName = "";
+      // split the full name into first, middle, and last name
+      const nameParts = fullname.split(" ");
+      if (nameParts.length === 1) {
+        // if there's only one name, it must be the first name
+        firstName = nameParts[0];
       } else {
-        lastName = middleAndLastName.pop();
-        if (middleAndLastName.length > 0) {
-          middleName = middleAndLastName.join(" ");
+        // if there's more than one name, assume the first name is the first element
+        firstName = nameParts.shift();
+
+        // check for nickname (must be in quotes)
+        const lastPart = nameParts[nameParts.length - 1];
+        if (lastPart.startsWith('"') && lastPart.endsWith('"')) {
+          nickname = lastPart.slice(1, -1);
+          nameParts.pop();
         }
+
+        // what's left must be the last name and any middle names
+        lastName = nameParts.pop();
+        middleName = nameParts
+          .filter(
+            (namePart) => !namePart.startsWith('"') && !namePart.endsWith('"')
+          )
+          .join(" ");
       }
 
       // remove "special" characters from the name properties
@@ -35,10 +50,11 @@ fetch("https://petlatkea.dk/2021/hogwarts/students.json")
         lastName: cleanLastName,
         middleName: cleanMiddleName,
         nickname,
-        house: house.toLowerCase(),
-        gender: gender.toLowerCase(),
+        house: house,
+        gender: gender,
       };
     });
+
     // create table rows
     const tableBody = document.querySelector("#studentTable tbody");
     cleanData.forEach((student) => {
@@ -69,7 +85,5 @@ fetch("https://petlatkea.dk/2021/hogwarts/students.json")
 
       tableBody.appendChild(row);
     });
-
-    console.log(cleanData);
   })
   .catch((error) => console.error(error));
