@@ -55,74 +55,84 @@ fetch("https://petlatkea.dk/2021/hogwarts/students.json")
       };
     });
 
-    // create table rows
+    
+    
+  // select table body
     const tableBody = document.querySelector("#studentTable tbody");
+
+    // create table rows
     cleanData.forEach((student) => {
       const row = document.createElement("tr");
+
+      // create first name cell
       const firstNameCell = document.createElement("td");
       firstNameCell.textContent = student.firstName;
       row.appendChild(firstNameCell);
 
+      // create last name cell
       const lastNameCell = document.createElement("td");
       lastNameCell.textContent = student.lastName;
       row.appendChild(lastNameCell);
 
-      const middleNameCell = document.createElement("td");
-      middleNameCell.textContent = student.middleName;
-      row.appendChild(middleNameCell);
-
-      const nicknameCell = document.createElement("td");
-      nicknameCell.textContent = student.nickname || "";
-      row.appendChild(nicknameCell);
-
+      // create house cell
       const houseCell = document.createElement("td");
       houseCell.textContent = student.house;
       row.appendChild(houseCell);
 
+      // create gender cell
       const genderCell = document.createElement("td");
       genderCell.textContent = student.gender;
       row.appendChild(genderCell);
 
-      tableBody.appendChild(row);
-    });
+  // create click event listener to display pop-up
+row.addEventListener("click", () => {
+  let fullName = student.firstName + " " + student.lastName;
+  if (student.nickname) {
+    fullName += ` "${student.nickname}"`;
+  }
+  if (student.middleName) {
+    fullName += ` ${student.middleName}`;
+  }
+  const studentHouse = student.house;
+  const studentGender = student.gender;
+  // const studentNickname = student.nickname || "";
 
-    // add pop-up function on table data
-    const studentRows = document.querySelectorAll("#studentTable tbody tr");
+  // create pop-up content
+  const popup = document.createElement("div");
+  popup.classList.add("popup");
 
-    studentRows.forEach((row) => {
-      row.addEventListener("click", () => {
-        const studentName = `${row.cells[0].textContent} ${row.cells[1].textContent}`;
-        const studentHouse = row.cells[4].textContent;
-        const studentGender = row.cells[5].textContent;
-        const studentNickname = row.cells[3].textContent;
-
-        const popup = document.createElement("div");
-        popup.classList.add("popup");
-
-        const closeButton = document.createElement("button");
-        closeButton.classList.add("popup__close");
-        closeButton.textContent = "X";
-        closeButton.addEventListener("click", () => popup.remove());
-
-        const nameElement = document.createElement("h2");
-        nameElement.textContent = studentNickname
-          ? `${studentName} "${studentNickname}"`
-          : studentName;
-
-        const houseElement = document.createElement("p");
-        houseElement.textContent = `House: ${studentHouse}`;
-
-        const genderElement = document.createElement("p");
-        genderElement.textContent = `Gender: ${studentGender}`;
-
-        popup.appendChild(closeButton);
-        popup.appendChild(nameElement);
-        popup.appendChild(houseElement);
-        popup.appendChild(genderElement);
-
-        document.body.appendChild(popup);
-      });
+  const closeButton = document.createElement("button");
+  closeButton.classList.add("popup__close");
+  closeButton.textContent = "X";
+  closeButton.addEventListener("click", () => {
+    popup.remove();
   });
+
+  const nameHeader = document.createElement("h2");
+  nameHeader.textContent = fullName;
+
+  const housePara = document.createElement("p");
+  housePara.textContent = `House: ${studentHouse}`;
+
+  const genderPara = document.createElement("p");
+  genderPara.textContent = `Gender: ${studentGender}`;
+
+  // const nicknamePara = document.createElement("p");
+  // nicknamePara.textContent = `Nickname: ${studentNickname}`;
+
+  popup.appendChild(closeButton);
+  popup.appendChild(nameHeader);
+  popup.appendChild(housePara);
+  popup.appendChild(genderPara);
+  // popup.appendChild(nicknamePara);
+  
+  document.body.appendChild(popup);
+});
+
+
+  tableBody.appendChild(row);
+});
+
 
     
   })
