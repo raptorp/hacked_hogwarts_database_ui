@@ -13,7 +13,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  }
+}
   
 .popup__close {
   position: absolute;
@@ -25,7 +25,7 @@
   border: none;
   color: white;
   cursor: pointer;
-  }
+}
   
 .popup h2 {
   font-size: 2rem;
@@ -35,5 +35,33 @@
 .popup p {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  }
-  
+}
+
+main {
+  display: flex;
+}
+
+#navbar {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  background-color: #919191;
+  padding: 20px;
+}
+
+#navbar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#navbar a {
+  text-decoration: none;
+  color: black;
+}
+
+#navbar a:hover {
+  color: black;
+  text-decoration: none;
+  background-color: aqua;
+}
