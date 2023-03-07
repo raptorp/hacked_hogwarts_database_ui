@@ -72,7 +72,7 @@ fetch("https://petlatkea.dk/2021/hogwarts/students.json")
       row.appendChild(middleNameCell);
 
       const nicknameCell = document.createElement("td");
-      nicknameCell.textContent = student.nickname || "-";
+      nicknameCell.textContent = student.nickname || "";
       row.appendChild(nicknameCell);
 
       const houseCell = document.createElement("td");
@@ -85,5 +85,43 @@ fetch("https://petlatkea.dk/2021/hogwarts/students.json")
 
       tableBody.appendChild(row);
     });
+    const studentRows = document.querySelectorAll("#studentTable tbody tr");
+
+    studentRows.forEach((row) => {
+      row.addEventListener("click", () => {
+        const studentName = `${row.cells[0].textContent} ${row.cells[1].textContent}`;
+        const studentHouse = row.cells[4].textContent;
+        const studentGender = row.cells[5].textContent;
+        const studentNickname = row.cells[3].textContent;
+
+        const popup = document.createElement("div");
+        popup.classList.add("popup");
+
+        const closeButton = document.createElement("button");
+        closeButton.classList.add("popup__close");
+        closeButton.textContent = "X";
+        closeButton.addEventListener("click", () => popup.remove());
+
+        const nameElement = document.createElement("h2");
+        nameElement.textContent = studentNickname
+          ? `${studentName} "${studentNickname}"`
+          : studentName;
+
+        const houseElement = document.createElement("p");
+        houseElement.textContent = `House: ${studentHouse}`;
+
+        const genderElement = document.createElement("p");
+        genderElement.textContent = `Gender: ${studentGender}`;
+
+        popup.appendChild(closeButton);
+        popup.appendChild(nameElement);
+        popup.appendChild(houseElement);
+        popup.appendChild(genderElement);
+
+        document.body.appendChild(popup);
+      });
+  });
+
+    
   })
   .catch((error) => console.error(error));
