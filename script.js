@@ -85,6 +85,8 @@ fetch("https://petlatkea.dk/2021/hogwarts/students.json")
 
       tableBody.appendChild(row);
     });
+
+    // add pop-up function on table data
     const studentRows = document.querySelectorAll("#studentTable tbody tr");
 
     studentRows.forEach((row) => {
