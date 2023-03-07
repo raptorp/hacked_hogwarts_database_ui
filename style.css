@@ -55,6 +55,10 @@ main {
   margin: 0;
 }
 
+#navbar li {
+  margin-bottom: 1rem;
+}
+
 #navbar a {
   text-decoration: none;
   color: black;
