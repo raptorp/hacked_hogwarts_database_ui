@@ -86,13 +86,14 @@ fetch("https://petlatkea.dk/2021/hogwarts/students.json")
 
   // create click event listener to display pop-up
 row.addEventListener("click", () => {
-  let fullName = student.firstName + " " + student.lastName;
-  if (student.nickname) {
-    fullName += ` "${student.nickname}"`;
-  }
+  let studentName = student.firstName;
   if (student.middleName) {
-    fullName += ` ${student.middleName}`;
+    studentName += ` ${student.middleName}`;
   }
+  if (student.nickname) {
+    studentName += ` "${student.nickname}"`;
+  }
+  studentName += ` ${student.lastName}`;
   const studentHouse = student.house;
   const studentGender = student.gender;
   // const studentNickname = student.nickname || "";
@@ -113,7 +114,8 @@ row.addEventListener("click", () => {
   popup.appendChild(img);
 
   const nameHeader = document.createElement("h2");
-  nameHeader.textContent = fullName;
+  nameHeader.textContent = studentName;
+
 
   const housePara = document.createElement("p");
   housePara.textContent = `House: ${studentHouse}`;
