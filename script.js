@@ -107,6 +107,10 @@ row.addEventListener("click", () => {
   closeButton.addEventListener("click", () => {
     popup.remove();
   });
+  const img = document.createElement("img");
+  img.src = `img/${student.lastName}_${student.firstName[0]}.png`;
+  img.alt = student.firstName + " " + student.lastName;
+  popup.appendChild(img);
 
   const nameHeader = document.createElement("h2");
   nameHeader.textContent = fullName;
@@ -121,10 +125,14 @@ row.addEventListener("click", () => {
   // nicknamePara.textContent = `Nickname: ${studentNickname}`;
 
   popup.appendChild(closeButton);
+  popup.appendChild(img);
   popup.appendChild(nameHeader);
   popup.appendChild(housePara);
   popup.appendChild(genderPara);
   // popup.appendChild(nicknamePara);
+
+  document.body.appendChild(popup);
+
   
   document.body.appendChild(popup);
 });
