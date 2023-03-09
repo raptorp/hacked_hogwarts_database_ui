@@ -69,3 +69,7 @@ main {
   text-decoration: none;
   background-color: aqua;
 }
+
+th {
+  background-color: #919191;
+}
