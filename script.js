@@ -1,8 +1,21 @@
-fetch("https://petlatkea.dk/2021/hogwarts/students.json")
-  .then((response) => response.json())
-  .then((data) => {
-    // "clean" and trim the data
-    const cleanData = data.map((item) => {
+"use strict";
+
+function start() {
+  async function loadData() {
+    try {
+      const response = await fetch(
+        "https://petlatkea.dk/2021/hogwarts/students.json"
+      );
+      const data = await response.json();
+      const cleanedData = cleanData(data);
+      createTableRows(cleanedData);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function cleanData(data) {
+    return data.map((item) => {
       const fullname = item.fullname.trim();
       const house = item.house.trim().toLowerCase();
       const gender = item.gender.trim().toLowerCase();
@@ -54,96 +67,82 @@ fetch("https://petlatkea.dk/2021/hogwarts/students.json")
         gender: gender,
       };
     });
+  }
 
-    
-    
-  // select table body
+  function sortTableRows(headerId, headerIndex, cleanData) {
     const tableBody = document.querySelector("#studentTable tbody");
+    const rows = Array.from(tableBody.querySelectorAll("tr"));
 
-    // create table rows
+    rows.sort((a, b) => {
+      const aText = a.children[headerIndex].textContent;
+      const bText = b.children[headerIndex].textContent;
+      return aText.localeCompare(bText);
+    });
+
+    const alreadySorted = headerId.startsWith("sorted-");
+    if (alreadySorted) {
+      rows.reverse();
+    }
+
+    const tableHeaders = document.querySelectorAll("#studentTable th");
+    tableHeaders.forEach((header) => {
+      header.id = header.id.replace(/^sorted-/, "");
+    });
+
+    headerId = alreadySorted
+      ? headerId.replace(/^sorted-/, "")
+      : "sorted-" + headerId;
+    console.log(document.querySelector("#studentTable"));
+    document.querySelector(`#${headerId}`).id = headerId;
+
+    tableBody.innerHTML = "";
+    rows.forEach((row) => tableBody.appendChild(row));
+  }
+
+  function createTableRows(cleanData) {
+    const tableBody = document.querySelector("#studentTable tbody");
+    tableBody.innerHTML = "";
+
+    const rowTemplate = document.querySelector("#table-row-template");
+
     cleanData.forEach((student) => {
-      const row = document.createElement("tr");
+      // clone the table row template
+      const row = rowTemplate.content.cloneNode(true);
 
-      // create first name cell
-      const firstNameCell = document.createElement("td");
-      firstNameCell.textContent = student.firstName;
-      row.appendChild(firstNameCell);
+      // update the cloned row with student data
+      row.querySelector(".last-name").textContent = student.lastName;
+      row.querySelector(".first-name").textContent = student.firstName;
+      row.querySelector(".house").textContent = student.house;
+      row.querySelector(".gender").textContent = student.gender;
 
-      // create last name cell
-      const lastNameCell = document.createElement("td");
-      lastNameCell.textContent = student.lastName;
-      row.appendChild(lastNameCell);
+      // add row to table body
+      tableBody.appendChild(row);
 
-      // create house cell
-      const houseCell = document.createElement("td");
-      houseCell.textContent = student.house;
-      row.appendChild(houseCell);
+      // log the row to check that the event listener is being added properly
+      console.log("Added row", row);
+    });
 
-      // create gender cell
-      const genderCell = document.createElement("td");
-      genderCell.textContent = student.gender;
-      row.appendChild(genderCell);
-
-  // create click event listener to display pop-up
-row.addEventListener("click", () => {
-  let studentName = student.firstName;
-  if (student.middleName) {
-    studentName += ` ${student.middleName}`;
+    // add event listeners to table headers for sorting
+    const tableHeaders = document.querySelectorAll("#studentTable th");
+    tableHeaders.forEach((header) => {
+      header.addEventListener("click", () => {
+        const headerId = header.id;
+        const headerIndex = Array.from(tableHeaders).indexOf(header);
+        sortTableRows(headerId, headerIndex, cleanData);
+      });
+    });
   }
-  if (student.nickname) {
-    studentName += ` "${student.nickname}"`;
-  }
-  studentName += ` ${student.lastName}`;
-  const studentHouse = student.house;
-  const studentGender = student.gender;
-  // const studentNickname = student.nickname || "";
 
-  // create pop-up content
-  const popup = document.createElement("div");
-  popup.classList.add("popup");
-
-  const closeButton = document.createElement("button");
-  closeButton.classList.add("popup__close");
-  closeButton.textContent = "X";
-  closeButton.addEventListener("click", () => {
-    popup.remove();
+  const tableHeaders = document.querySelectorAll("#studentTable th");
+  tableHeaders.forEach((header) => {
+    header.addEventListener("click", () => {
+      const headerId = header.id;
+      const headerIndex = Array.from(tableHeaders).indexOf(header);
+      sortTableRows(headerId, headerIndex, cleanData);
+    });
   });
-  const img = document.createElement("img");
-  img.src = `img/${student.lastName}_${student.firstName[0]}.png`;
-  img.alt = student.firstName + " " + student.lastName;
-  popup.appendChild(img);
 
-  const nameHeader = document.createElement("h2");
-  nameHeader.textContent = studentName;
+  loadData();
+}
 
-
-  const housePara = document.createElement("p");
-  housePara.textContent = `House: ${studentHouse}`;
-
-  const genderPara = document.createElement("p");
-  genderPara.textContent = `Gender: ${studentGender}`;
-
-  // const nicknamePara = document.createElement("p");
-  // nicknamePara.textContent = `Nickname: ${studentNickname}`;
-
-  popup.appendChild(closeButton);
-  popup.appendChild(img);
-  popup.appendChild(nameHeader);
-  popup.appendChild(housePara);
-  popup.appendChild(genderPara);
-  // popup.appendChild(nicknamePara);
-
-  document.body.appendChild(popup);
-
-  
-  document.body.appendChild(popup);
-});
-
-
-  tableBody.appendChild(row);
-});
-
-
-    
-  })
-  .catch((error) => console.error(error));
+window.addEventListener("DOMContentLoaded", start);
