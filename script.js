@@ -1,5 +1,7 @@
 "use strict";
 
+window.addEventListener("DOMContentLoaded", start);
+
 function start() {
   async function loadData() {
     try {
@@ -69,51 +71,42 @@ function start() {
     });
   }
 
-  function sortTableRows(headerId, headerIndex, cleanData) {
-    const tableBody = document.querySelector("#studentTable tbody");
-    const rows = Array.from(tableBody.querySelectorAll("tr"));
-
-    rows.sort((a, b) => {
-      const aText = a.children[headerIndex].textContent;
-      const bText = b.children[headerIndex].textContent;
-      return aText.localeCompare(bText);
-    });
-
-    const alreadySorted = headerId.startsWith("sorted-");
-    if (alreadySorted) {
-      rows.reverse();
-    }
-
-    const tableHeaders = document.querySelectorAll("#studentTable th");
-    tableHeaders.forEach((header) => {
-      header.id = header.id.replace(/^sorted-/, "");
-    });
-
-    headerId = alreadySorted
-      ? headerId.replace(/^sorted-/, "")
-      : "sorted-" + headerId;
-    console.log(document.querySelector("#studentTable"));
-    document.querySelector(`#${headerId}`).id = headerId;
-
-    tableBody.innerHTML = "";
-    rows.forEach((row) => tableBody.appendChild(row));
-  }
-
   function createTableRows(cleanData) {
     const tableBody = document.querySelector("#studentTable tbody");
     tableBody.innerHTML = "";
+
+    const filterButtons = document.querySelector("#filter-buttons");
+    filterButtons.addEventListener("click", (event) => {
+      if (event.target.classList.contains("filter")) {
+        const filter = event.target.dataset.filter;
+        const rows = tableBody.querySelectorAll("tr");
+        rows.forEach((row) => {
+          if (filter === "all" || row.classList.contains(filter)) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+      }
+    });
 
     const rowTemplate = document.querySelector("#table-row-template");
 
     cleanData.forEach((student) => {
       // clone the table row template
-      const row = rowTemplate.content.cloneNode(true);
+      const row = rowTemplate.cloneNode(true).content;
 
       // update the cloned row with student data
       row.querySelector(".last-name").textContent = student.lastName;
       row.querySelector(".first-name").textContent = student.firstName;
       row.querySelector(".house").textContent = student.house;
       row.querySelector(".gender").textContent = student.gender;
+
+      // add appropriate class to row based on student's house
+      row.querySelector("tr").classList.add(student.house.toLowerCase());
+
+      // add appropriate class to row based on student's gender
+      row.querySelector("tr").classList.add(student.gender.toLowerCase());
 
       // add click event listener to row to display popup
       row.querySelector(".first-name").addEventListener("click", () => {
@@ -125,19 +118,6 @@ function start() {
 
       // add row to table body
       tableBody.appendChild(row);
-
-      // log the row to check that the event listener is being added properly
-      console.log("Added row", row);
-    });
-
-    // add event listeners to table headers for sorting
-    const tableHeaders = document.querySelectorAll("#studentTable th");
-    tableHeaders.forEach((header) => {
-      header.addEventListener("click", () => {
-        const headerId = header.id;
-        const headerIndex = Array.from(tableHeaders).indexOf(header);
-        sortTableRows(headerId, headerIndex, cleanData);
-      });
     });
   }
 
@@ -195,16 +175,5 @@ function start() {
     document.body.appendChild(popupOverlay);
   }
 
-  const tableHeaders = document.querySelectorAll("#studentTable th");
-  tableHeaders.forEach((header) => {
-    header.addEventListener("click", () => {
-      const headerId = header.id;
-      const headerIndex = Array.from(tableHeaders).indexOf(header);
-      sortTableRows(headerId, headerIndex, cleanData);
-    });
-  });
-
   loadData();
 }
-
-window.addEventListener("DOMContentLoaded", start);

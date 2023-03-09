@@ -32,39 +32,59 @@
         </ul>
       </nav>
       <div id="con">
-        <p>
-          Houses:
-          <button class="filter" data-action="filter" data-filter="hufflepuff">
-            Hufflepuff
-          </button>
-          <button class="filter" data-action="filter" data-filter="slytherin">
-            Slytherin
-          </button>
-          <button class="filter" data-action="filter" data-filter="ravenclaw">
-            Ravenclaw
-          </button>
-          <button class="filter" data-action="filter" data-filter="gryffindor">
-            Gryffindor
-          </button>
-        </p>
-        <p>
-          Gender:
-          <button class="filter" data-action="filter" data-filter="girls">
-            Girls
-          </button>
-          <button class="filter" data-action="filter" data-filter="boys">
-            Boys
-          </button>
-        </p>
-        <p>
-          Roles:
-          <button class="filter" data-action="filter" data-filter="prefects">
-            Prefects
-          </button>
-          <button class="filter" data-action="filter" data-filter="inq-squad">
-            Inq Twats
-          </button>
-        </p>
+        <div id="filter-buttons">
+          <p>
+            Houses:
+            <button
+              class="filter"
+              data-action="filter"
+              data-filter="hufflepuff"
+            >
+              Hufflepuff
+            </button>
+            <button class="filter" data-action="filter" data-filter="slytherin">
+              Slytherin
+            </button>
+            <button class="filter" data-action="filter" data-filter="ravenclaw">
+              Ravenclaw
+            </button>
+            <button
+              class="filter"
+              data-action="filter"
+              data-filter="gryffindor"
+            >
+              Gryffindor
+            </button>
+            <button class="filter" data-action="filter" data-filter="all">
+              Show All
+            </button>
+          </p>
+          <p>
+            Gender:
+            <button class="filter" data-action="filter" data-filter="girl">
+              Girls
+            </button>
+            <button class="filter" data-action="filter" data-filter="boy">
+              Boys
+            </button>
+            <button class="filter" data-action="filter" data-filter="all">
+              Show All
+            </button>
+          </p>
+          <p>
+            Roles:
+            <button class="filter" data-action="filter" data-filter="prefects">
+              Prefects
+            </button>
+            <button class="filter" data-action="filter" data-filter="inq-squad">
+              Inq Twats
+            </button>
+            <button class="filter" data-action="filter" data-filter="all">
+              Show All
+            </button>
+          </p>
+        </div>
+
         <table id="studentTable">
           <thead>
             <tr id="sorting">
@@ -122,6 +142,6 @@
       <p>&copy; 2023 AULA for Wizards</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script defer src="script.js"></script>
   </body>
 </html>
