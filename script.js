@@ -115,6 +115,14 @@ function start() {
       row.querySelector(".house").textContent = student.house;
       row.querySelector(".gender").textContent = student.gender;
 
+      // add click event listener to row to display popup
+      row.querySelector(".first-name").addEventListener("click", () => {
+        showPopup(student);
+      });
+      row.querySelector(".last-name").addEventListener("click", () => {
+        showPopup(student);
+      });
+
       // add row to table body
       tableBody.appendChild(row);
 
@@ -131,6 +139,60 @@ function start() {
         sortTableRows(headerId, headerIndex, cleanData);
       });
     });
+  }
+
+  function showPopup(student) {
+    // create popup overlay
+    const popupOverlay = document.createElement("div");
+    popupOverlay.classList.add("popup-overlay");
+
+    // create popup container
+    const popupContainer = document.createElement("div");
+    popupContainer.classList.add("popup-container");
+    popupOverlay.appendChild(popupContainer);
+
+    // create popup header
+    const popupHeader = document.createElement("div");
+    popupHeader.classList.add("popup-header");
+    popupContainer.appendChild(popupHeader);
+
+    // create popup close button
+    const closeButton = document.createElement("button");
+    closeButton.classList.add("popup-close-button");
+    closeButton.textContent = "x";
+    closeButton.addEventListener("click", () => {
+      popupOverlay.remove();
+    });
+    popupHeader.appendChild(closeButton);
+
+    // create popup title
+    const popupTitle = document.createElement("h2");
+    popupTitle.classList.add("popup-title");
+    popupTitle.textContent = "Student Details";
+    popupHeader.appendChild(popupTitle);
+
+    // create popup content
+    const popupContent = document.createElement("div");
+    popupContent.classList.add("popup-content");
+    popupContainer.appendChild(popupContent);
+
+    // add student details to popup content
+    const name =
+      student.firstName + " " + student.middleName + " " + student.lastName;
+    const nameParagraph = document.createElement("p");
+    nameParagraph.innerHTML = `<strong>Name:</strong> ${name}`;
+    popupContent.appendChild(nameParagraph);
+
+    const houseParagraph = document.createElement("p");
+    houseParagraph.innerHTML = `<strong>House:</strong> ${student.house}`;
+    popupContent.appendChild(houseParagraph);
+
+    const genderParagraph = document.createElement("p");
+    genderParagraph.innerHTML = `<strong>Gender:</strong> ${student.gender}`;
+    popupContent.appendChild(genderParagraph);
+
+    // add popup to the DOM
+    document.body.appendChild(popupOverlay);
   }
 
   const tableHeaders = document.querySelectorAll("#studentTable th");
