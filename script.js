@@ -71,6 +71,17 @@ function start() {
     });
   }
 
+  function updateStudentCount() {
+    const tableBody = document.querySelector("#studentTable tbody");
+    const visibleRows = tableBody.querySelectorAll(
+      "tr:not([style*='display: none'])"
+    );
+    const countElement = document.querySelector("#studentCount");
+    countElement.textContent = `${visibleRows.length} student${
+      visibleRows.length !== 1 ? "s" : ""
+    } currently listed`;
+  }
+
   function createTableRows(cleanData) {
     const tableBody = document.querySelector("#studentTable tbody");
     tableBody.innerHTML = "";
@@ -87,6 +98,8 @@ function start() {
             row.style.display = "none";
           }
         });
+
+        updateStudentCount();
       }
     });
 
@@ -119,6 +132,8 @@ function start() {
       // add row to table body
       tableBody.appendChild(row);
     });
+
+    updateStudentCount();
   }
 
   function showPopup(student) {
