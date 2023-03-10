@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wizard AULA</title>
     <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/6066763fce.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <header>
@@ -16,9 +20,26 @@
       <template id="popup-template">
         <div class="popup">
           <h2>Student Details</h2>
-          <p><strong>Name:</strong> <span class="name"></span></p>
-          <p><strong>House:</strong> <span class="house"></span></p>
-          <p><strong>Gender:</strong> <span class="gender"></span></p>
+          <div id="student-card">
+            <img
+              class="student-img"
+              src=""
+              alt="Profile picture of the student"
+            />
+            <div id="student-info">
+              <p><strong>Name:</strong> <span class="name"></span></p>
+              <p><strong>House:</strong> <span class="house"></span></p>
+              <p><strong>Gender:</strong> <span class="gender"></span></p>
+              <p>
+                <strong>Bloodstatus:</strong> <span class="bloodstatus"></span>
+              </p>
+              <label class="toggle">
+                <input class="toggle-checkbox" type="checkbox" name="prefect" />
+                <div class="toggle-switch"></div>
+                <span class="toggle-label">Prefect</span>
+              </label>
+            </div>
+          </div>
         </div>
       </template>
 
@@ -55,20 +76,16 @@
             >
               Gryffindor
             </button>
-            <button class="filter" data-action="filter" data-filter="all">
-              Show All
-            </button>
           </p>
           <p>
             Gender:
             <button class="filter" data-action="filter" data-filter="girl">
               Girls
+              <i class="fas fa-venus"></i>
             </button>
             <button class="filter" data-action="filter" data-filter="boy">
               Boys
-            </button>
-            <button class="filter" data-action="filter" data-filter="all">
-              Show All
+              <i class="fas fa-mars"></i>
             </button>
           </p>
           <p>
@@ -79,10 +96,10 @@
             <button class="filter" data-action="filter" data-filter="inq-squad">
               Inq Twats
             </button>
-            <button class="filter" data-action="filter" data-filter="all">
-              Show All
-            </button>
           </p>
+          <button class="filter" data-action="filter" data-filter="all">
+            Show All
+          </button>
         </div>
 
         <table id="studentTable">
