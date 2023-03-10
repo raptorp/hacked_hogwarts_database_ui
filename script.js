@@ -11,10 +11,10 @@ async function loadData(url) {
 
 function getBloodStatus(lastName, families) {
   const lowerCaseLastName = lastName.toLowerCase();
-  if (families.pure.includes(lowerCaseLastName)) {
-    return "pure-blood";
-  } else if (families.half.includes(lowerCaseLastName)) {
+  if (families.half.includes(lowerCaseLastName)) {
     return "half-blood";
+  } else if (families.pure.includes(lowerCaseLastName)) {
+    return "pure-blood";
   } else {
     return "muggle-born";
   }
@@ -255,6 +255,8 @@ async function start() {
   const families = await loadData(
     "https://petlatkea.dk/2021/hogwarts/families.json"
   );
+  families.half = families.half.map((familyName) => familyName.toLowerCase());
+  families.pure = families.pure.map((familyName) => familyName.toLowerCase());
   const students = await loadData(
     "https://petlatkea.dk/2021/hogwarts/students.json"
   );
