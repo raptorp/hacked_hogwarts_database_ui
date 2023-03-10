@@ -2,6 +2,8 @@
 
 window.addEventListener("DOMContentLoaded", start);
 
+let cleanedData = [];
+
 async function loadData(url) {
   let response = await fetch(url);
   return await response.json();
@@ -84,6 +86,9 @@ function cleanData(students, families) {
       house: house,
       gender: gender,
       bloodStatus: bloodStatus,
+      isPrefect: false,
+      isRacist: false,
+      isExpelled: false,
     };
   });
 }
@@ -192,26 +197,25 @@ function showPopup(student) {
   )}.png`;
   clone.querySelector(".student-img").src = imageFilename;
 
-  // add toggle switch event listener
-  const toggleSwitch = clone.querySelector(".toggle-checkbox");
-  toggleSwitch.addEventListener("change", () => {
-    const isPrefect = toggleSwitch.checked;
-    student.isPrefect = isPrefect;
+  // add toggle switch event listener for isPrefect
+  const toggleSwitchPrefect = clone.querySelector(".toggle-prefect-status");
+  toggleSwitchPrefect.checked = student.isPrefect;
+  toggleSwitchPrefect.addEventListener("change", () => {
+    student.isPrefect = toggleSwitchPrefect.checked;
+  });
 
-    // update student data in localStorage or sessionStorage
-    if (localStorage.getItem("cleanedData")) {
-      localStorage.setItem("cleanedData", JSON.stringify(cleanedData));
-    } else if (sessionStorage.getItem("cleanedData")) {
-      sessionStorage.setItem("cleanedData", JSON.stringify(cleanedData));
-    }
+  // add toggle switch event listener for isRacist
+  const toggleSwitchRacist = clone.querySelector(".toggle-racist-status");
+  toggleSwitchRacist.checked = student.isRacist;
+  toggleSwitchRacist.addEventListener("change", () => {
+    student.isRacist = toggleSwitchRacist.checked;
+  });
 
-    // add/remove class to student card based on prefect status
-    const studentCard = document.querySelector(`#student-${student.id}`);
-    if (isPrefect) {
-      studentCard.classList.add("prefect");
-    } else {
-      studentCard.classList.remove("prefect");
-    }
+  // add toggle switch event listener for isExpelled
+  const toggleSwitchExpelled = clone.querySelector(".toggle-expelled-status");
+  toggleSwitchExpelled.checked = student.isExpelled;
+  toggleSwitchExpelled.addEventListener("change", () => {
+    student.isExpelled = toggleSwitchExpelled.checked;
   });
 
   // create popup overlay
@@ -255,14 +259,7 @@ async function start() {
     "https://petlatkea.dk/2021/hogwarts/students.json"
   );
 
-  let cleanedData = [];
-  if (localStorage.getItem("cleanedData")) {
-    cleanedData = JSON.parse(localStorage.getItem("cleanedData"));
-  } else if (sessionStorage.getItem("cleanedData")) {
-    cleanedData = JSON.parse(sessionStorage.getItem("cleanedData"));
-  } else {
-    cleanedData = cleanData(students, families);
-  }
+  cleanedData = cleanData(students, families);
 
   createTableRows(cleanedData);
 }
