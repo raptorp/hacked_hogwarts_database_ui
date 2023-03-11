@@ -257,6 +257,7 @@ td {
   width: 20vw;
   background-color: var(--clr-lighter);
   padding: 1.25rem;
+  border: 1px solid var(--clr-light);
 }
 
 fieldset {
