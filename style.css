@@ -30,6 +30,11 @@
   --huff-light-brown: #726255;
   --huff-dark-brown: #372e29;
 
+  /* BASE COLOURS */
+  --clr-dark: #202020;
+  --clr-mid: #8a8a8a;
+  --clr-light: #f1f1f1;
+
   /* fonts */
 
   /* typography */
@@ -152,10 +157,11 @@ th {
 
 .toggle-switch {
   display: inline-block;
-  background: #ccc;
+  /* background: #cccccc; */
   border-radius: 16px;
-  width: 58px;
-  height: 32px;
+  box-shadow: 0 0 0 0.07rem inset;
+  width: 2.538rem;
+  height: 1.4rem;
   position: relative;
   vertical-align: middle;
   transition: background 0.25s;
@@ -166,25 +172,23 @@ th {
 }
 .toggle-switch:before {
   display: block;
-  background: linear-gradient(to bottom, #fff 0%, #eee 100%);
+  background: var(--clr-dark);
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
-  width: 24px;
-  height: 24px;
+  width: 1.05rem;
+  height: 1.05rem;
   position: absolute;
-  top: 4px;
-  left: 4px;
+  top: 0.175rem;
+  left: 0.175rem;
   transition: left 0.25s;
 }
 .toggle:hover .toggle-switch:before {
-  background: linear-gradient(to bottom, #fff 0%, #fff 100%);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+  background: var(--clr-mid);
 }
 .toggle-checkbox:checked + .toggle-switch {
-  background: #56c080;
+  background: var(--slyth-dark-green-hue);
 }
 .toggle-checkbox:checked + .toggle-switch:before {
-  left: 30px;
+  left: 1.313rem;
 }
 
 .toggle-checkbox {
@@ -193,9 +197,9 @@ th {
 }
 
 .toggle-label {
-  margin-left: 5px;
+  margin-left: 0.313rem;
   position: relative;
-  top: 2px;
+  top: 0.088rem;
 }
 
 /* ***** CAPITALIZE NAMES ***** */
