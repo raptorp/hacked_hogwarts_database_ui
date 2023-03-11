@@ -68,15 +68,6 @@
       </template>
 
       <nav id="navbar">
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Students</a></li>
-          <li><a href="#">Houses</a></li>
-          <li><a href="#">Prefects</a></li>
-          <li><a href="#">Inq twats</a></li>
-        </ul>
-      </nav>
-      <div id="con">
         <div id="filter-buttons" onclick="return filterStudents(this);">
           <fieldset>
             <legend>Houses</legend>
@@ -186,7 +177,15 @@
             oninput="return filterStudents(this.parentElement);"
           />
         </div>
-
+        <!-- <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Students</a></li>
+          <li><a href="#">Houses</a></li>
+          <li><a href="#">Prefects</a></li>
+          <li><a href="#">Inq twats</a></li>
+        </ul> -->
+      </nav>
+      <div id="con">
         <table id="studentTable">
           <thead>
             <tr id="sorting">

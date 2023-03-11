@@ -31,9 +31,12 @@
   --huff-dark-brown: #372e29;
 
   /* BASE COLOURS */
-  --clr-dark: #202020;
-  --clr-mid: #8a8a8a;
-  --clr-light: #f1f1f1;
+  --clr-darkest: #2c2c2c;
+  --clr-darker: #595959;
+  --clr-dark: #7f7f7f;
+  --clr-mid: #a5a5a5;
+  --clr-light: #cccccc;
+  --clr-lighter: #f2f2f2;
 
   /* fonts */
 
@@ -59,38 +62,8 @@ main {
   display: flex;
 }
 
-#navbar {
-  display: flex;
-  flex-direction: column;
-  width: 10rem;
-  /* height: 80vh; */
-  background-color: #919191;
-  padding: 20px;
-}
-
-#navbar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-#navbar li {
-  margin-bottom: 1rem;
-}
-
-#navbar a {
-  text-decoration: none;
-  color: black;
-}
-
-#navbar a:hover {
-  color: black;
-  text-decoration: none;
-  background-color: aqua;
-}
-
 th {
-  background-color: #e2e2e2;
+  background-color: var(--clr-light);
   height: 2.5rem;
   width: 8rem;
 }
@@ -172,7 +145,7 @@ th {
 }
 .toggle-switch:before {
   display: block;
-  background: var(--clr-dark);
+  background: var(--clr-darkest);
   border-radius: 50%;
   width: 1.05rem;
   height: 1.05rem;
@@ -276,4 +249,25 @@ tr {
 
 td {
   padding-left: 0.25rem;
+}
+
+/* ***** NAV/FILTER BAR THINGIE ***** */
+
+#navbar {
+  width: 20vw;
+  background-color: var(--clr-lighter);
+  padding: 1.25rem;
+}
+
+fieldset {
+  border: 1px solid var(--clr-mid);
+  border-radius: 5px;
+  width: 100%;
+  padding: 0 0.7rem 0.7rem;
+}
+
+legend {
+  font-size: 1rem;
+  padding: 0 0.35rem;
+  color: var(--clr-darker);
 }
