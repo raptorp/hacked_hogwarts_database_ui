@@ -62,13 +62,6 @@ function cleanData(students, families) {
       .replace(/[^a-zA-Z\-]/g, "")
       .toLowerCase();
 
-    // capitalize the first letter of each name
-    firstName =
-      cleanFirstName.charAt(0).toUpperCase() + cleanFirstName.slice(1);
-    lastName = cleanLastName.charAt(0).toUpperCase() + cleanLastName.slice(1);
-    middleName =
-      cleanMiddleName.charAt(0).toUpperCase() + cleanMiddleName.slice(1);
-
     // house name first letter capitalized
 
     // check if the student's last name is in the list of families or half-bloods
@@ -79,8 +72,8 @@ function cleanData(students, families) {
     const bloodStatus = getBloodStatus(cleanLastName, families);
 
     return {
-      firstName: firstName,
-      lastName: lastName,
+      firstName: firstName.toLowerCase(),
+      lastName: lastName.toLowerCase(),
       middleName: middleName,
       nickname,
       house: house,
@@ -104,69 +97,158 @@ function updateStudentCount() {
   } currently listed`;
 }
 
-function createTableRows(cleanData) {
+function sortStudents(students, key, direction) {
+  console.log(`Sorting by "${key}" in "${direction}" order`);
+
+  const sortedStudents = [...students];
+
+  const sortFunction =
+    direction === "asc"
+      ? (a, b) => {
+          if (a[key] === b[key]) {
+            // if the key is the same, compare the star property
+            return a.star === b.star ? 0 : a.star ? -1 : 1;
+          } else {
+            return a[key] > b[key] ? 1 : -1;
+          }
+        }
+      : (a, b) => {
+          if (a[key] === b[key]) {
+            // if the key is the same, compare the star property
+            return a.star === b.star ? 0 : a.star ? 1 : -1;
+          } else {
+            return a[key] < b[key] ? 1 : -1;
+          }
+        };
+
+  sortedStudents.sort(sortFunction);
+  return sortedStudents;
+}
+
+function _filterStudents(elem, data) {
+  let tmp = [...elem.querySelectorAll(".filter")];
+  //console.log(tmp);
+  let filter = tmp.reduce((collector, elem) => {
+    if (elem.checked) collector.push(elem.name);
+    return collector;
+  }, new Array());
+
+  let search = elem.querySelector("#search-bar").value;
+
+  return data.filter(
+    (student) =>
+      filter.includes(student.house) &&
+      filter.includes(student.gender) &&
+      (student.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        student.lastName.toLowerCase().includes(search.toLowerCase())) &&
+      (student.isPrefect ? filter.includes("isPrefect") : true) &&
+      (student.isRacist ? filter.includes("isRacist") : true) &&
+      (student.isExpelled ? filter.includes("isExpelled") : true)
+  );
+}
+
+function filterStudents(event) {
+  createTableRows(_filterStudents(event, cleanedData));
+  updateStudentCount();
+}
+
+function createTable() {
   const tableBody = document.querySelector("#studentTable tbody");
   tableBody.innerHTML = "";
 
-  const filterButtons = document.querySelector("#filter-buttons");
-  filterButtons.addEventListener("click", (event) => {
-    if (event.target.classList.contains("filter")) {
-      const filter = event.target.dataset.filter;
-      const rows = tableBody.querySelectorAll("tr");
-      rows.forEach((row) => {
-        if (filter === "all" || row.classList.contains(filter)) {
-          row.style.display = "";
-        } else {
-          row.style.display = "none";
-        }
-      });
+  // add header cell blah
+  const headerCells = document.querySelectorAll("#sorting th");
+  headerCells.forEach((cell) =>
+    cell.addEventListener("click", () => {
+      console.log(cell);
+      const sortKey = cell.dataset.sort;
+      const sortDirection =
+        cell.dataset.sortDirection === "asc" ? "desc" : "asc";
+      cleanedData = sortStudents(cleanedData, sortKey, sortDirection);
+      createTableRows(
+        _filterStudents(document.querySelector("#filter-buttons"), cleanedData)
+      );
+      // display sorted animals
+      // update sort direction attribute
+      cell.dataset.sortDirection = sortDirection;
+    })
+  );
+}
 
-      updateStudentCount();
-    }
-  });
-
+function createTableRows(data) {
+  const tableBody = document.querySelector("#studentTable tbody");
+  tableBody.innerHTML = "";
   const rowTemplate = document.querySelector("#table-row-template");
 
-  cleanData.forEach((student) => {
-    // clone the table row template
-    const row = rowTemplate.cloneNode(true).content;
+  // add row to table body
+  tableBody.replaceChildren(
+    ...data.map((student, index) => {
+      // clone the table row template
+      const row = rowTemplate.cloneNode(true).content;
 
-    // update the cloned row with student data
-    row.querySelector(".last-name").textContent = student.lastName
-      ? student.lastName
-      : "----------";
-    row.querySelector(".first-name").textContent = student.firstName;
-    row.querySelector(".house").textContent = student.house;
+      // update the cloned row with student data
+      row.querySelector(".last-name").textContent = student.lastName
+        ? student.lastName
+        : "----------";
+      row.querySelector(".first-name").textContent = student.firstName;
+      row.querySelector(".house").textContent = student.house;
 
-    // create gender icon and update the gender text with the icon
-    const genderIcon =
-      student.gender === "girl"
-        ? "<i class='fas fa-venus'></i>"
-        : "<i class='fas fa-mars'></i>";
-    row.querySelector(".gender").innerHTML = genderIcon;
+      let isPrefectDom = row.querySelector(".isPrefect"); // give each prefect cell a unique id so it can be reached in the pop-up
+      isPrefectDom.textContent = student.isPrefect;
+      isPrefectDom.id = `prefect-${index}`;
 
-    // add appropriate class to row based on student's house
-    row.querySelector("tr").classList.add(student.house.toLowerCase());
+      let isRacistDom = row.querySelector(".isRacist"); // give each racist cell a unique id so it can be reached in the pop-up
+      isRacistDom.textContent = student.isRacist;
+      isRacistDom.id = `racist-${index}`;
 
-    // add appropriate class to row based on student's gender
-    row.querySelector("tr").classList.add(student.gender.toLowerCase());
+      let isExpelledDom = row.querySelector(".isExpelled"); // give each expelled cell a unique id so it can be reached in the pop-up
+      isExpelledDom.textContent = student.isExpelled;
+      isExpelledDom.id = `expelled-${index}`;
 
-    // add click event listener to row to display popup
-    row.querySelector(".first-name").addEventListener("click", () => {
-      showPopup(student);
-    });
-    row.querySelector(".last-name").addEventListener("click", () => {
-      showPopup(student);
-    });
+      // create gender icon and update the gender text with the icon
+      const genderIcon =
+        student.gender === "girl"
+          ? "<i class='fas fa-venus'></i>"
+          : "<i class='fas fa-mars'></i>";
+      row.querySelector(".gender").innerHTML = genderIcon;
 
-    // add row to table body
-    tableBody.appendChild(row);
-  });
+      // create true/false icons for student status and update the text with the icon
+      const prefectStatus = student.isPrefect
+        ? "<i class='far fa-circle-check'></i>"
+        : "<i class='far fa-circle-xmark'></i>";
+      row.querySelector(".isPrefect").innerHTML = prefectStatus;
+
+      const racistStatus = student.isRacist
+        ? "<i class='far fa-circle-check'></i>"
+        : "<i class='far fa-circle-xmark'></i>";
+      row.querySelector(".isRacist").innerHTML = racistStatus;
+
+      const expelledStatus = student.isExpelled
+        ? "<i class='far fa-circle-check'></i>"
+        : "<i class='far fa-circle-xmark'></i>";
+      row.querySelector(".isExpelled").innerHTML = expelledStatus;
+
+      // add appropriate class to row based on student's house
+      row.querySelector("tr").classList.add(student.house.toLowerCase());
+
+      // add appropriate class to row based on student's gender
+      row.querySelector("tr").classList.add(student.gender.toLowerCase());
+
+      // add click event listener to row to display popup
+      row.querySelector(".first-name").addEventListener("click", () => {
+        showPopup(student, row);
+      });
+      row.querySelector(".last-name").addEventListener("click", () => {
+        showPopup(student, row);
+      });
+      return row;
+    })
+  );
 
   updateStudentCount();
 }
 
-function showPopup(student) {
+function showPopup(student, row) {
   // retrieve popup template
   const template = document.querySelector("#popup-template");
 
@@ -202,6 +284,11 @@ function showPopup(student) {
   toggleSwitchPrefect.checked = student.isPrefect;
   toggleSwitchPrefect.addEventListener("change", () => {
     student.isPrefect = toggleSwitchPrefect.checked;
+    const statusIcon = student.isPrefect
+      ? "<i class='far fa-circle-check'></i>"
+      : "<i class='far fa-circle-xmark'></i>";
+    const cellId = `prefect-${cleanedData.indexOf(student)}`;
+    document.getElementById(cellId).innerHTML = statusIcon;
   });
 
   // add toggle switch event listener for isRacist
@@ -209,6 +296,11 @@ function showPopup(student) {
   toggleSwitchRacist.checked = student.isRacist;
   toggleSwitchRacist.addEventListener("change", () => {
     student.isRacist = toggleSwitchRacist.checked;
+    const statusIcon = student.isRacist
+      ? "<i class='far fa-circle-check'></i>"
+      : "<i class='far fa-circle-xmark'></i>";
+    const cellId = `racist-${cleanedData.indexOf(student)}`;
+    document.getElementById(cellId).innerHTML = statusIcon;
   });
 
   // add toggle switch event listener for isExpelled
@@ -216,6 +308,11 @@ function showPopup(student) {
   toggleSwitchExpelled.checked = student.isExpelled;
   toggleSwitchExpelled.addEventListener("change", () => {
     student.isExpelled = toggleSwitchExpelled.checked;
+    const statusIcon = student.isExpelled
+      ? "<i class='far fa-circle-check'></i>"
+      : "<i class='far fa-circle-xmark'></i>";
+    const cellId = `expelled-${cleanedData.indexOf(student)}`;
+    document.getElementById(cellId).innerHTML = statusIcon;
   });
 
   // create popup overlay
@@ -263,5 +360,6 @@ async function start() {
 
   cleanedData = cleanData(students, families);
 
+  createTable();
   createTableRows(cleanedData);
 }
