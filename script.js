@@ -62,13 +62,6 @@ function cleanData(students, families) {
       .replace(/[^a-zA-Z\-]/g, "")
       .toLowerCase();
 
-    // capitalize the first letter of each name
-    firstName =
-      cleanFirstName.charAt(0).toUpperCase() + cleanFirstName.slice(1);
-    lastName = cleanLastName.charAt(0).toUpperCase() + cleanLastName.slice(1);
-    middleName =
-      cleanMiddleName.charAt(0).toUpperCase() + cleanMiddleName.slice(1);
-
     // house name first letter capitalized
 
     // check if the student's last name is in the list of families or half-bloods
@@ -79,8 +72,8 @@ function cleanData(students, families) {
     const bloodStatus = getBloodStatus(cleanLastName, families);
 
     return {
-      firstName: firstName,
-      lastName: lastName,
+      firstName: firstName.toLowerCase(),
+      lastName: lastName.toLowerCase(),
       middleName: middleName,
       nickname,
       house: house,
@@ -127,7 +120,10 @@ function createTableRows(cleanData) {
 
   const rowTemplate = document.querySelector("#table-row-template");
 
-  cleanData.forEach((student) => {
+  cleanData.forEach((student, index) => {
+    console.log(`index: ${index}`);
+    console.log(`cleanedData index: ${cleanedData.indexOf(student)}`);
+
     // clone the table row template
     const row = rowTemplate.cloneNode(true).content;
 
@@ -138,12 +134,40 @@ function createTableRows(cleanData) {
     row.querySelector(".first-name").textContent = student.firstName;
     row.querySelector(".house").textContent = student.house;
 
+    let isPrefectDom = row.querySelector(".isPrefect"); // give each prefect cell a unique id so it can be reached in the pop-up
+    isPrefectDom.textContent = student.isPrefect;
+    isPrefectDom.id = `prefect-${index}`;
+
+    let isRacistDom = row.querySelector(".isRacist"); // give each racist cell a unique id so it can be reached in the pop-up
+    isRacistDom.textContent = student.isRacist;
+    isRacistDom.id = `racist-${index}`;
+
+    let isExpelledDom = row.querySelector(".isExpelled"); // give each expelled cell a unique id so it can be reached in the pop-up
+    isExpelledDom.textContent = student.isExpelled;
+    isExpelledDom.id = `expelled-${index}`;
+
     // create gender icon and update the gender text with the icon
     const genderIcon =
       student.gender === "girl"
         ? "<i class='fas fa-venus'></i>"
         : "<i class='fas fa-mars'></i>";
     row.querySelector(".gender").innerHTML = genderIcon;
+
+    // create true/false icons for student status and update the text with the icon
+    const prefectStatus = student.isPrefect
+      ? "<i class='far fa-circle-check'></i>"
+      : "<i class='far fa-circle-xmark'></i>";
+    row.querySelector(".isPrefect").innerHTML = prefectStatus;
+
+    const racistStatus = student.isRacist
+      ? "<i class='far fa-circle-check'></i>"
+      : "<i class='far fa-circle-xmark'></i>";
+    row.querySelector(".isRacist").innerHTML = racistStatus;
+
+    const expelledStatus = student.isExpelled
+      ? "<i class='far fa-circle-check'></i>"
+      : "<i class='far fa-circle-xmark'></i>";
+    row.querySelector(".isExpelled").innerHTML = expelledStatus;
 
     // add appropriate class to row based on student's house
     row.querySelector("tr").classList.add(student.house.toLowerCase());
@@ -202,6 +226,11 @@ function showPopup(student) {
   toggleSwitchPrefect.checked = student.isPrefect;
   toggleSwitchPrefect.addEventListener("change", () => {
     student.isPrefect = toggleSwitchPrefect.checked;
+    const statusIcon = student.isPrefect
+      ? "<i class='far fa-circle-check'></i>"
+      : "<i class='far fa-circle-xmark'></i>";
+    const cellId = `prefect-${cleanedData.indexOf(student)}`;
+    document.getElementById(cellId).innerHTML = statusIcon;
   });
 
   // add toggle switch event listener for isRacist
@@ -209,6 +238,11 @@ function showPopup(student) {
   toggleSwitchRacist.checked = student.isRacist;
   toggleSwitchRacist.addEventListener("change", () => {
     student.isRacist = toggleSwitchRacist.checked;
+    const statusIcon = student.isRacist
+      ? "<i class='far fa-circle-check'></i>"
+      : "<i class='far fa-circle-xmark'></i>";
+    const cellId = `racist-${cleanedData.indexOf(student)}`;
+    document.getElementById(cellId).innerHTML = statusIcon;
   });
 
   // add toggle switch event listener for isExpelled
@@ -216,6 +250,11 @@ function showPopup(student) {
   toggleSwitchExpelled.checked = student.isExpelled;
   toggleSwitchExpelled.addEventListener("change", () => {
     student.isExpelled = toggleSwitchExpelled.checked;
+    const statusIcon = student.isExpelled
+      ? "<i class='far fa-circle-check'></i>"
+      : "<i class='far fa-circle-xmark'></i>";
+    const cellId = `expelled-${cleanedData.indexOf(student)}`;
+    document.getElementById(cellId).innerHTML = statusIcon;
   });
 
   // create popup overlay
