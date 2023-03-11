@@ -97,100 +97,158 @@ function updateStudentCount() {
   } currently listed`;
 }
 
-function createTableRows(cleanData) {
+function sortStudents(students, key, direction) {
+  console.log(`Sorting by "${key}" in "${direction}" order`);
+
+  const sortedStudents = [...students];
+
+  const sortFunction =
+    direction === "asc"
+      ? (a, b) => {
+          if (a[key] === b[key]) {
+            // if the key is the same, compare the star property
+            return a.star === b.star ? 0 : a.star ? -1 : 1;
+          } else {
+            return a[key] > b[key] ? 1 : -1;
+          }
+        }
+      : (a, b) => {
+          if (a[key] === b[key]) {
+            // if the key is the same, compare the star property
+            return a.star === b.star ? 0 : a.star ? 1 : -1;
+          } else {
+            return a[key] < b[key] ? 1 : -1;
+          }
+        };
+
+  sortedStudents.sort(sortFunction);
+  return sortedStudents;
+}
+
+function _filterStudents(elem, data) {
+  let tmp = [...elem.querySelectorAll(".filter")];
+  //console.log(tmp);
+  let filter = tmp.reduce((collector, elem) => {
+    if (elem.checked) collector.push(elem.name);
+    return collector;
+  }, new Array());
+
+  let search = elem.querySelector("#search-bar").value;
+
+  return data.filter(
+    (student) =>
+      filter.includes(student.house) &&
+      filter.includes(student.gender) &&
+      (student.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        student.lastName.toLowerCase().includes(search.toLowerCase())) &&
+      (student.isPrefect ? filter.includes("isPrefect") : true) &&
+      (student.isRacist ? filter.includes("isRacist") : true) &&
+      (student.isExpelled ? filter.includes("isExpelled") : true)
+  );
+}
+
+function filterStudents(event) {
+  createTableRows(_filterStudents(event, cleanedData));
+  updateStudentCount();
+}
+
+function createTable() {
   const tableBody = document.querySelector("#studentTable tbody");
   tableBody.innerHTML = "";
 
-  const filterButtons = document.querySelector("#filter-buttons");
-  filterButtons.addEventListener("click", (event) => {
-    if (event.target.classList.contains("filter")) {
-      const filter = event.target.dataset.filter;
-      const rows = tableBody.querySelectorAll("tr");
-      rows.forEach((row) => {
-        if (filter === "all" || row.classList.contains(filter)) {
-          row.style.display = "";
-        } else {
-          row.style.display = "none";
-        }
-      });
+  // add header cell blah
+  const headerCells = document.querySelectorAll("#sorting th");
+  headerCells.forEach((cell) =>
+    cell.addEventListener("click", () => {
+      console.log(cell);
+      const sortKey = cell.dataset.sort;
+      const sortDirection =
+        cell.dataset.sortDirection === "asc" ? "desc" : "asc";
+      cleanedData = sortStudents(cleanedData, sortKey, sortDirection);
+      createTableRows(
+        _filterStudents(document.querySelector("#filter-buttons"), cleanedData)
+      );
+      // display sorted animals
+      // update sort direction attribute
+      cell.dataset.sortDirection = sortDirection;
+    })
+  );
+}
 
-      updateStudentCount();
-    }
-  });
-
+function createTableRows(data) {
+  const tableBody = document.querySelector("#studentTable tbody");
+  tableBody.innerHTML = "";
   const rowTemplate = document.querySelector("#table-row-template");
 
-  cleanData.forEach((student, index) => {
-    console.log(`index: ${index}`);
-    console.log(`cleanedData index: ${cleanedData.indexOf(student)}`);
+  // add row to table body
+  tableBody.replaceChildren(
+    ...data.map((student, index) => {
+      // clone the table row template
+      const row = rowTemplate.cloneNode(true).content;
 
-    // clone the table row template
-    const row = rowTemplate.cloneNode(true).content;
+      // update the cloned row with student data
+      row.querySelector(".last-name").textContent = student.lastName
+        ? student.lastName
+        : "----------";
+      row.querySelector(".first-name").textContent = student.firstName;
+      row.querySelector(".house").textContent = student.house;
 
-    // update the cloned row with student data
-    row.querySelector(".last-name").textContent = student.lastName
-      ? student.lastName
-      : "----------";
-    row.querySelector(".first-name").textContent = student.firstName;
-    row.querySelector(".house").textContent = student.house;
+      let isPrefectDom = row.querySelector(".isPrefect"); // give each prefect cell a unique id so it can be reached in the pop-up
+      isPrefectDom.textContent = student.isPrefect;
+      isPrefectDom.id = `prefect-${index}`;
 
-    let isPrefectDom = row.querySelector(".isPrefect"); // give each prefect cell a unique id so it can be reached in the pop-up
-    isPrefectDom.textContent = student.isPrefect;
-    isPrefectDom.id = `prefect-${index}`;
+      let isRacistDom = row.querySelector(".isRacist"); // give each racist cell a unique id so it can be reached in the pop-up
+      isRacistDom.textContent = student.isRacist;
+      isRacistDom.id = `racist-${index}`;
 
-    let isRacistDom = row.querySelector(".isRacist"); // give each racist cell a unique id so it can be reached in the pop-up
-    isRacistDom.textContent = student.isRacist;
-    isRacistDom.id = `racist-${index}`;
+      let isExpelledDom = row.querySelector(".isExpelled"); // give each expelled cell a unique id so it can be reached in the pop-up
+      isExpelledDom.textContent = student.isExpelled;
+      isExpelledDom.id = `expelled-${index}`;
 
-    let isExpelledDom = row.querySelector(".isExpelled"); // give each expelled cell a unique id so it can be reached in the pop-up
-    isExpelledDom.textContent = student.isExpelled;
-    isExpelledDom.id = `expelled-${index}`;
+      // create gender icon and update the gender text with the icon
+      const genderIcon =
+        student.gender === "girl"
+          ? "<i class='fas fa-venus'></i>"
+          : "<i class='fas fa-mars'></i>";
+      row.querySelector(".gender").innerHTML = genderIcon;
 
-    // create gender icon and update the gender text with the icon
-    const genderIcon =
-      student.gender === "girl"
-        ? "<i class='fas fa-venus'></i>"
-        : "<i class='fas fa-mars'></i>";
-    row.querySelector(".gender").innerHTML = genderIcon;
+      // create true/false icons for student status and update the text with the icon
+      const prefectStatus = student.isPrefect
+        ? "<i class='far fa-circle-check'></i>"
+        : "<i class='far fa-circle-xmark'></i>";
+      row.querySelector(".isPrefect").innerHTML = prefectStatus;
 
-    // create true/false icons for student status and update the text with the icon
-    const prefectStatus = student.isPrefect
-      ? "<i class='far fa-circle-check'></i>"
-      : "<i class='far fa-circle-xmark'></i>";
-    row.querySelector(".isPrefect").innerHTML = prefectStatus;
+      const racistStatus = student.isRacist
+        ? "<i class='far fa-circle-check'></i>"
+        : "<i class='far fa-circle-xmark'></i>";
+      row.querySelector(".isRacist").innerHTML = racistStatus;
 
-    const racistStatus = student.isRacist
-      ? "<i class='far fa-circle-check'></i>"
-      : "<i class='far fa-circle-xmark'></i>";
-    row.querySelector(".isRacist").innerHTML = racistStatus;
+      const expelledStatus = student.isExpelled
+        ? "<i class='far fa-circle-check'></i>"
+        : "<i class='far fa-circle-xmark'></i>";
+      row.querySelector(".isExpelled").innerHTML = expelledStatus;
 
-    const expelledStatus = student.isExpelled
-      ? "<i class='far fa-circle-check'></i>"
-      : "<i class='far fa-circle-xmark'></i>";
-    row.querySelector(".isExpelled").innerHTML = expelledStatus;
+      // add appropriate class to row based on student's house
+      row.querySelector("tr").classList.add(student.house.toLowerCase());
 
-    // add appropriate class to row based on student's house
-    row.querySelector("tr").classList.add(student.house.toLowerCase());
+      // add appropriate class to row based on student's gender
+      row.querySelector("tr").classList.add(student.gender.toLowerCase());
 
-    // add appropriate class to row based on student's gender
-    row.querySelector("tr").classList.add(student.gender.toLowerCase());
-
-    // add click event listener to row to display popup
-    row.querySelector(".first-name").addEventListener("click", () => {
-      showPopup(student);
-    });
-    row.querySelector(".last-name").addEventListener("click", () => {
-      showPopup(student);
-    });
-
-    // add row to table body
-    tableBody.appendChild(row);
-  });
+      // add click event listener to row to display popup
+      row.querySelector(".first-name").addEventListener("click", () => {
+        showPopup(student, row);
+      });
+      row.querySelector(".last-name").addEventListener("click", () => {
+        showPopup(student, row);
+      });
+      return row;
+    })
+  );
 
   updateStudentCount();
 }
 
-function showPopup(student) {
+function showPopup(student, row) {
   // retrieve popup template
   const template = document.querySelector("#popup-template");
 
@@ -302,5 +360,6 @@ async function start() {
 
   cleanedData = cleanData(students, families);
 
+  createTable();
   createTableRows(cleanedData);
 }

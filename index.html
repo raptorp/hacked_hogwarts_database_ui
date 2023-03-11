@@ -77,117 +77,128 @@
         </ul>
       </nav>
       <div id="con">
-        <div id="filter-buttons">
-          <p>
-            Houses:
-            <button
-              class="filter"
-              data-action="filter"
-              data-filter="hufflepuff"
-            >
-              Hufflepuff
-            </button>
-            <button class="filter" data-action="filter" data-filter="slytherin">
-              Slytherin
-            </button>
-            <button class="filter" data-action="filter" data-filter="ravenclaw">
-              Ravenclaw
-            </button>
-            <button
-              class="filter"
-              data-action="filter"
-              data-filter="gryffindor"
-            >
-              Gryffindor
-            </button>
-          </p>
-          <p>
-            Gender:
-            <button class="filter" data-action="filter" data-filter="girl">
-              Girls
-              <i class="fas fa-venus"></i>
-            </button>
-            <button class="filter" data-action="filter" data-filter="boy">
-              Boys
-              <i class="fas fa-mars"></i>
-            </button>
-          </p>
-          <p>
-            Status:
-            <button class="filter" data-action="filter" data-filter="prefect">
-              Prefects
-            </button>
-            <button class="filter" data-action="filter" data-filter="racist">
-              Racists
-            </button>
-            <button class="filter" data-action="filter" data-filter="Expelled">
-              Expelled
-            </button>
-          </p>
-          <button class="filter" data-action="filter" data-filter="all">
-            Show All
-          </button>
+        <div id="filter-buttons" onclick="return filterStudents(this);">
+          <fieldset>
+            <legend>Houses</legend>
+
+            <label class="toggle">
+              <input
+                checked
+                class="toggle-checkbox filter"
+                type="checkbox"
+                name="hufflepuff"
+              />
+              <div class="toggle-switch"></div>
+              <span class="toggle-label">Hufflepuff</span>
+            </label>
+            <label class="toggle">
+              <input
+                checked
+                class="toggle-checkbox filter"
+                type="checkbox"
+                name="slytherin"
+              />
+              <div class="toggle-switch"></div>
+              <span class="toggle-label">Slytherin</span>
+            </label>
+            <label class="toggle">
+              <input
+                checked
+                class="toggle-checkbox filter"
+                type="checkbox"
+                name="ravenclaw"
+              />
+              <div class="toggle-switch"></div>
+              <span class="toggle-label">Ravenclaw</span>
+            </label>
+            <label class="toggle">
+              <input
+                checked
+                class="toggle-checkbox filter"
+                type="checkbox"
+                name="gryffindor"
+              />
+              <div class="toggle-switch"></div>
+              <span class="toggle-label">Gryffindor</span>
+            </label>
+          </fieldset>
+          <fieldset>
+            <legend>Gender</legend>
+            <label class="toggle">
+              <input
+                checked
+                class="toggle-checkbox filter"
+                type="checkbox"
+                name="girl"
+              />
+              <div class="toggle-switch"></div>
+              <span class="toggle-label"
+                >Girls <i class="fas fa-venus"></i
+              ></span>
+            </label>
+            <label class="toggle">
+              <input
+                checked
+                class="toggle-checkbox filter"
+                type="checkbox"
+                name="boy"
+              />
+              <div class="toggle-switch"></div>
+              <span class="toggle-label">Boys <i class="fas fa-mars"></i></span>
+            </label>
+          </fieldset>
+          <legend>Status</legend>
+          <label class="toggle">
+            <input
+              checked
+              class="toggle-checkbox filter"
+              type="checkbox"
+              name="isPrefect"
+            />
+            <div class="toggle-switch"></div>
+            <span class="toggle-label"> Prefects</span>
+          </label>
+          <label class="toggle">
+            <input
+              checked
+              class="toggle-checkbox filter"
+              type="checkbox"
+              name="isRacist"
+            />
+            <div class="toggle-switch"></div>
+            <span class="toggle-label">Racists</span> </label
+          ><label class="toggle">
+            <input
+              checked
+              class="toggle-checkbox filter"
+              type="checkbox"
+              name="isExpelled"
+            />
+            <div class="toggle-switch"></div>
+            <span class="toggle-label">Expelled</span>
+          </label>
+
+          <button class="filter" data-filter="all">Show All</button>
+
+          <input
+            id="search-bar"
+            placeholder="search for student..."
+            oninput="return filterStudents(this.parentElement);"
+          />
         </div>
 
         <table id="studentTable">
           <thead>
             <tr id="sorting">
-              <th
-                data-action="sort"
-                data-sort-direction="asc"
-                data-sort="lastn"
-                id="lastNameHeader"
-              >
-                Last Name
-              </th>
-              <th
-                data-action="sort"
-                data-sort-direction="asc"
-                data-sort="firstn"
-                id="firstNameHeader"
-              >
+              <th data-sort-direction="asc" data-sort="lastName">Last Name</th>
+              <th data-sort-direction="asc" data-sort="firstName">
                 First Name
               </th>
-              <th
-                data-action="sort"
-                data-sort-direction="asc"
-                data-sort="house"
-                id="houseHeader"
-              >
-                House
-              </th>
-              <th
-                data-action="sort"
-                data-sort-direction="asc"
-                data-sort="gender"
-                id="genderHeader"
-              >
-                Gender
-              </th>
-              <th
-                data-action="sort"
-                data-sort-direction="asc"
-                data-sort="prefect"
-                id="prefectHeader"
-              >
-                Prefect
-              </th>
-              <th
-                data-action="sort"
-                data-sort-direction="asc"
-                data-sort="racist"
-                id="racistHeader"
-              >
-                Racist
-              </th>
-              <th
-                data-action="sort"
-                data-sort-direction="asc"
-                data-sort="expelled"
-                id="expelledHeader"
-              >
-                Expelled
-              </th>
+              <th data-sort-direction="asc" data-sort="house">House</th>
+              <th data-sort-direction="asc" data-sort="gender">Gender</th>
+              <th data-sort-direction="asc" data-sort="isPrefect">Prefect</th>
+              <th data-sort-direction="asc" data-sort="racist">Racist</th>
+              <th data-sort-direction="asc" data-sort="expelled">Expelled</th>
             </tr>
           </thead>
 
