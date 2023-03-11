@@ -39,6 +39,16 @@
   margin: 0;
   padding: 0;
 }
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto",
+    "Segoe UI", sans-serif;
+}
 
 main {
   display: flex;
@@ -134,16 +144,6 @@ th {
 }
 
 /* ***** TOGGLE SWITCH ***** */
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto",
-    "Segoe UI", sans-serif;
-}
 
 .toggle {
   cursor: pointer;
