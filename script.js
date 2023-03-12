@@ -234,6 +234,13 @@ function createTableRows(data) {
       // add appropriate class to row based on student's gender
       row.querySelector("tr").classList.add(student.gender.toLowerCase());
 
+      // add appropriate class to row based on student's blood status
+      if (student.bloodStatus) {
+        row
+          .querySelector("tr")
+          .classList.add(student.bloodStatus.toLowerCase());
+      }
+
       // add click event listener to row to display popup
       row.querySelector(".first-name").addEventListener("click", () => {
         showPopup(student, row);
@@ -318,12 +325,32 @@ function showPopup(student, row) {
   const toggleSwitchRacist = clone.querySelector(".toggle-racist-status");
   toggleSwitchRacist.checked = student.isRacist;
   toggleSwitchRacist.addEventListener("change", () => {
-    student.isRacist = toggleSwitchRacist.checked;
-    const statusIcon = student.isRacist
-      ? "<i class='fa-solid fa-circle-check'></i>"
-      : "<i class='fa-solid fa-circle-xmark'></i>";
-    const cellId = `racist-${cleanedData.indexOf(student)}`;
-    document.getElementById(cellId).innerHTML = statusIcon;
+    if (student.bloodStatus === "pure-blood") {
+      student.isRacist = toggleSwitchRacist.checked;
+      const statusIcon = student.isRacist
+        ? "<i class='fa-solid fa-circle-check'></i>"
+        : "<i class='fa-solid fa-circle-xmark'></i>";
+      const cellId = `racist-${cleanedData.indexOf(student)}`;
+      document.getElementById(cellId).innerHTML = statusIcon;
+    } else {
+      // Show the racist dialog box if the student is not a pure-blood
+      const racistDialog = document.getElementById("racist-dialog");
+      racistDialog.style.display = "flex";
+
+      // Add an event listener to the OK button that hides the dialog box when it's clicked
+      const okButton = racistDialog.querySelector("button");
+      okButton.addEventListener("click", () => {
+        racistDialog.style.display = "none";
+      });
+
+      // Disable the toggle switch
+      toggleSwitchRacist.checked = false;
+      student.isRacist = false;
+
+      // Set the disabled attribute and add a CSS class to the toggle switch to make it appear faded
+      toggleSwitchRacist.setAttribute("disabled", true);
+      toggleSwitchRacist.classList.add("disabled-toggle-switch");
+    }
   });
 
   // add toggle switch event listener for isExpelled
