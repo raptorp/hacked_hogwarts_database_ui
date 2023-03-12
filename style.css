@@ -83,6 +83,10 @@ th {
   width: calc(100% / 7);
 }
 
+th:first-of-type {
+  border-left: 0.5rem solid var(--clr-dark);
+}
+
 /* ***** POP UP ***** */
 .popup-overlay {
   position: fixed;
@@ -343,19 +347,19 @@ td.gender,
 /* ***** HOUSE COLORS IN CELLS ***** */
 
 tr.slytherin > .house {
-  border-left: 0.75rem solid var(--slyth-dark-green-hue);
+  border-left: 0.5rem solid var(--slyth-dark-green-hue);
 }
 
 tr.gryffindor > .house {
-  border-left: 0.75rem solid var(--gryf-dark-red-hue);
+  border-left: 0.5rem solid var(--gryf-dark-red-hue);
 }
 
 tr.hufflepuff > .house {
-  border-left: 0.75rem solid var(--huff-yellow-hue);
+  border-left: 0.5rem solid var(--huff-yellow-hue);
 }
 
 tr.ravenclaw > .house {
-  border-left: 0.75rem solid var(--raven-dark-blue-hue);
+  border-left: 0.5rem solid var(--raven-dark-blue-hue);
 }
 
 /* ***** CELLS ***** */
@@ -367,14 +371,17 @@ tr:nth-child(2n) {
   background: var(--clr-lighter);
 }
 
-tr:last-of-type {
+tbody tr:last-child {
   border-bottom: 1px solid var(--clr-lighter);
 }
 
 td {
-  padding-left: 0.5rem;
   border-right: 1px solid var(--clr-lighter);
   height: 2.25rem;
+}
+
+tr td:nth-child(-n + 3) {
+  padding-left: 0.5rem;
 }
 
 /* ***** SCROLL BAR STYLING ***** */
