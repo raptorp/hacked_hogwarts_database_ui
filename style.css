@@ -505,7 +505,21 @@ fieldset label {
   background-position: center;
 }
 
-#prefect-limit-dialog .dialog-content {
+#prefect-dialog .dialog-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 498px;
+  height: 498px;
+  background-image: url(/snape/disappointing.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#expelled-dialog .dialog-content {
   position: relative;
   display: flex;
   flex-direction: column;

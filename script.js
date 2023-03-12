@@ -255,6 +255,13 @@ function createTableRows(data) {
   updateStudentCount();
 }
 
+const prefectsPerHouse = {
+  gryffindor: 0,
+  hufflepuff: 0,
+  ravenclaw: 0,
+  slytherin: 0,
+};
+
 function showPopup(student, row) {
   // retrieve popup template
   const template = document.querySelector("#popup-template");
@@ -313,13 +320,57 @@ function showPopup(student, row) {
   const toggleSwitchPrefect = clone.querySelector(".toggle-prefect-status");
   toggleSwitchPrefect.checked = student.isPrefect;
   toggleSwitchPrefect.addEventListener("change", () => {
+    if (toggleSwitchPrefect.checked) {
+      // Check if the limit of 2 prefects per house has been reached
+      if (prefectsPerHouse[student.house] >= 2) {
+        // Show the prefect limit dialog box
+        const prefectLimitDialog = document.getElementById("prefect-dialog");
+        prefectLimitDialog.style.display = "flex";
+
+        // Add an event listener to the OK button that hides the dialog box when it's clicked
+        const okButton = prefectLimitDialog.querySelector("button");
+        okButton.addEventListener("click", () => {
+          prefectLimitDialog.style.display = "none";
+        });
+
+        // Set the toggle switch back to unchecked and update the student object
+        toggleSwitchPrefect.checked = false;
+        student.isPrefect = false;
+        return;
+      }
+
+      // Increment the number of prefects in the student's house
+      prefectsPerHouse[student.house]++;
+
+      // Update the prefect status icon in the table
+      const statusIcon = "<i class='fa-solid fa-circle-check'></i>";
+      const cellId = `prefect-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellId).innerHTML = statusIcon;
+    } else {
+      // Decrement the number of prefects in the student's house
+      prefectsPerHouse[student.house]--;
+
+      // Update the prefect status icon in the table
+      const statusIcon = "<i class='fa-solid fa-circle-xmark'></i>";
+      const cellId = `prefect-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellId).innerHTML = statusIcon;
+    }
+
+    // Update the student object
     student.isPrefect = toggleSwitchPrefect.checked;
-    const statusIcon = student.isPrefect
-      ? "<i class='fa-solid fa-circle-check'></i>"
-      : "<i class='fa-solid fa-circle-xmark'></i>";
-    const cellId = `prefect-${student.lastName}-${student.firstName}`;
-    document.getElementById(cellId).innerHTML = statusIcon;
   });
+
+  // // add toggle switch event listener for isPrefect
+  // const toggleSwitchPrefect = clone.querySelector(".toggle-prefect-status");
+  // toggleSwitchPrefect.checked = student.isPrefect;
+  // toggleSwitchPrefect.addEventListener("change", () => {
+  //   student.isPrefect = toggleSwitchPrefect.checked;
+  //   const statusIcon = student.isPrefect
+  //     ? "<i class='fa-solid fa-circle-check'></i>"
+  //     : "<i class='fa-solid fa-circle-xmark'></i>";
+  //   const cellId = `prefect-${student.lastName}-${student.firstName}`;
+  //   document.getElementById(cellId).innerHTML = statusIcon;
+  // });
 
   // add toggle switch event listener for isRacist
   const toggleSwitchRacist = clone.querySelector(".toggle-racist-status");
@@ -343,13 +394,9 @@ function showPopup(student, row) {
         racistDialog.style.display = "none";
       });
 
-      // Disable the toggle switch
+      // Set the toggle switch back to unchecked and update the student object
       toggleSwitchRacist.checked = false;
       student.isRacist = false;
-
-      // Set the disabled attribute and add a CSS class to the toggle switch to make it appear faded
-      toggleSwitchRacist.setAttribute("disabled", true);
-      toggleSwitchRacist.classList.add("disabled-toggle-switch");
     }
   });
 
@@ -357,12 +404,28 @@ function showPopup(student, row) {
   const toggleSwitchExpelled = clone.querySelector(".toggle-expelled-status");
   toggleSwitchExpelled.checked = student.isExpelled;
   toggleSwitchExpelled.addEventListener("change", () => {
-    student.isExpelled = toggleSwitchExpelled.checked;
-    const statusIcon = student.isExpelled
-      ? "<i class='fa-solid fa-circle-check'></i>"
-      : "<i class='fa-solid fa-circle-xmark'></i>";
-    const cellId = `expelled-${student.lastName}-${student.firstName}`;
-    document.getElementById(cellId).innerHTML = statusIcon;
+    if (!student.isExpelled || toggleSwitchExpelled.checked) {
+      student.isExpelled = toggleSwitchExpelled.checked;
+      const statusIcon = student.isExpelled
+        ? "<i class='fa-solid fa-circle-check'></i>"
+        : "<i class='fa-solid fa-circle-xmark'></i>";
+      const cellId = `expelled-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellId).innerHTML = statusIcon;
+    } else {
+      // Show the expelled dialog box if the student is already expelled
+      const expelledDialog = document.getElementById("expelled-dialog");
+      expelledDialog.style.display = "flex";
+
+      // Add an event listener to the OK button that hides the dialog box when it's clicked
+      const okButton = expelledDialog.querySelector("button");
+      okButton.addEventListener("click", () => {
+        expelledDialog.style.display = "none";
+      });
+
+      // Set the toggle switch back to checked and update the student object
+      toggleSwitchExpelled.checked = true;
+      student.isExpelled = true;
+    }
   });
 
   // create popup overlay
