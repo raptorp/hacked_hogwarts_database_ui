@@ -360,18 +360,6 @@ function showPopup(student, row) {
     student.isPrefect = toggleSwitchPrefect.checked;
   });
 
-  // // add toggle switch event listener for isPrefect
-  // const toggleSwitchPrefect = clone.querySelector(".toggle-prefect-status");
-  // toggleSwitchPrefect.checked = student.isPrefect;
-  // toggleSwitchPrefect.addEventListener("change", () => {
-  //   student.isPrefect = toggleSwitchPrefect.checked;
-  //   const statusIcon = student.isPrefect
-  //     ? "<i class='fa-solid fa-circle-check'></i>"
-  //     : "<i class='fa-solid fa-circle-xmark'></i>";
-  //   const cellId = `prefect-${student.lastName}-${student.firstName}`;
-  //   document.getElementById(cellId).innerHTML = statusIcon;
-  // });
-
   // add toggle switch event listener for isRacist
   const toggleSwitchRacist = clone.querySelector(".toggle-racist-status");
   toggleSwitchRacist.checked = student.isRacist;
@@ -450,6 +438,29 @@ function showPopup(student, row) {
   document.body.appendChild(popupOverlay);
 }
 
+function hackTheSystem() {
+  // Reset filter buttons to hide the new student better
+  const filterCheckboxes = document.querySelectorAll(".filter");
+  filterCheckboxes.forEach((checkbox) => (checkbox.checked = true));
+
+  // Create a new student object with default values
+  const newStudent = {
+    firstName: "Sabrina",
+    middleName: "",
+    nickname: "The Menace",
+    lastName: "Sorensen",
+    gender: "girl",
+    house: "slytherin",
+    bloodStatus: "mud-blood",
+    isPrefect: false,
+    isRacist: false,
+    isExpelled: false,
+  };
+
+  // Add the new student to the data set
+  cleanedData.push(newStudent);
+}
+
 async function start() {
   const families = await loadData(
     "https://petlatkea.dk/2021/hogwarts/families.json"
@@ -464,4 +475,7 @@ async function start() {
 
   createTable();
   createTableRows(cleanedData);
+
+  const hackButton = document.querySelector("#hack-button");
+  hackButton.addEventListener("click", hackTheSystem);
 }
