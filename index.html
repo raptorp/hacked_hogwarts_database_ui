@@ -18,53 +18,58 @@
     </header>
     <main>
       <template id="popup-template">
-        <div class="popup">
-          <h2>Student Details</h2>
-          <div id="student-card">
-            <img
-              class="student-img"
-              src=""
-              alt="Profile picture of the student"
-            />
-            <div id="student-info">
-              <p><strong>Name:</strong> <span class="name"></span></p>
-              <p><strong>House:</strong> <span class="house"></span></p>
-              <p><strong>Gender:</strong> <span class="gender"></span></p>
-              <p>
-                <strong>Bloodstatus:</strong> <span class="bloodstatus"></span>
-              </p>
-              <div id="toggle-cont">
-                <label class="toggle">
-                  <input
-                    class="toggle-checkbox toggle-prefect-status"
-                    type="checkbox"
-                    name="prefect"
-                  />
-                  <div class="toggle-switch"></div>
-                  <span class="toggle-label">Prefect</span>
-                </label>
-                <label class="toggle">
-                  <input
-                    class="toggle-checkbox toggle-racist-status"
-                    type="checkbox"
-                    name="racist"
-                  />
-                  <div class="toggle-switch"></div>
-                  <span class="toggle-label">Racist</span>
-                </label>
-                <label class="toggle">
-                  <input
-                    class="toggle-checkbox toggle-expelled-status"
-                    type="checkbox"
-                    name="expelled"
-                  />
-                  <div class="toggle-switch"></div>
-                  <span class="toggle-label">Expelled</span>
-                </label>
-              </div>
-            </div>
-          </div>
+        <!-- <div id="student-card"> -->
+        <div class="card-header">
+          <div class="card-cover"></div>
+          <button
+            class="popup-close-button"
+            onclick="document.querySelector('.popup-overlay').remove()"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <img
+            class="student-img"
+            src="img/avatar.jpg"
+            alt="Profile picture of the student"
+          />
+          <p class="name"></p>
         </div>
+
+        <div id="student-info">
+          <p><strong>House:</strong> <span class="house"></span></p>
+          <p><strong>Bloodstatus:</strong> <span class="bloodstatus"></span></p>
+          <p><strong>Gender:</strong> <span class="gender"></span></p>
+        </div>
+        <div id="toggle-cont">
+          <label class="toggle">
+            <input
+              class="toggle-checkbox toggle-prefect-status"
+              type="checkbox"
+              name="prefect"
+            />
+            <div class="toggle-switch"></div>
+            <span class="toggle-label">Prefect</span>
+          </label>
+          <label class="toggle">
+            <input
+              class="toggle-checkbox toggle-racist-status"
+              type="checkbox"
+              name="racist"
+            />
+            <div class="toggle-switch"></div>
+            <span class="toggle-label">Racist</span>
+          </label>
+          <label class="toggle">
+            <input
+              class="toggle-checkbox toggle-expelled-status"
+              type="checkbox"
+              name="expelled"
+            />
+            <div class="toggle-switch"></div>
+            <span class="toggle-label">Expelled</span>
+          </label>
+        </div>
+        <!-- </div> -->
       </template>
 
       <nav id="navbar">

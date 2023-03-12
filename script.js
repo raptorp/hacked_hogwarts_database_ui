@@ -265,19 +265,42 @@ function showPopup(student, row) {
 
   clone.querySelector(".name").textContent = name;
   clone.querySelector(".house").textContent = student.house;
+  clone.querySelector(".bloodstatus").textContent = student.bloodStatus;
   const genderIcon =
     student.gender === "girl"
       ? "<i class='fas fa-venus'></i>"
       : "<i class='fas fa-mars'></i>";
   clone.querySelector(".gender").innerHTML = genderIcon;
 
-  clone.querySelector(".bloodstatus").textContent = student.bloodStatus;
-
   // create image filename from student's name
-  const imageFilename = `img/${student.lastName}_${student.firstName.charAt(
-    0
-  )}.png`;
-  clone.querySelector(".student-img").src = imageFilename;
+  let imageFilename;
+
+  if (student.lastName.includes("-")) {
+    const parts = student.lastName.split("-");
+    const lastName = parts[parts.length - 1];
+    imageFilename = `img/${lastName}_${student.firstName.charAt(0)}.png`;
+  } else if (student.lastName === "Patil") {
+    imageFilename = `img/${student.lastName}_${student.firstName}.png`;
+  } else {
+    imageFilename = `img/${student.lastName}_${student.firstName.charAt(
+      0
+    )}.png`;
+  }
+
+  const imgElement = clone.querySelector(".student-img");
+
+  // Check if the image file exists, and if not, display a default image
+  fetch(imageFilename)
+    .then((response) => {
+      if (!response.ok) {
+        imgElement.src = "img/avatar.jpg";
+      } else {
+        imgElement.src = imageFilename;
+      }
+    })
+    .catch(() => {
+      imgElement.src = "img/avatar.jpg";
+    });
 
   // add toggle switch event listener for isPrefect
   const toggleSwitchPrefect = clone.querySelector(".toggle-prefect-status");
@@ -319,24 +342,13 @@ function showPopup(student, row) {
   const popupOverlay = document.createElement("div");
   popupOverlay.classList.add("popup-overlay");
 
+  // change the cardcover depending on the class of the student
+  popupOverlay.classList.add(`popup-${student.house}`);
+
   // create popup container
   const popupContainer = document.createElement("div");
   popupContainer.classList.add("popup-container");
   popupOverlay.appendChild(popupContainer);
-
-  // create popup header
-  const popupHeader = document.createElement("div");
-  popupHeader.classList.add("popup-header");
-  popupContainer.appendChild(popupHeader);
-
-  // create popup close button
-  const closeButton = document.createElement("button");
-  closeButton.classList.add("popup-close-button");
-  closeButton.textContent = "x";
-  closeButton.addEventListener("click", () => {
-    popupOverlay.remove();
-  });
-  popupHeader.appendChild(closeButton);
 
   // append cloned template to popup content
   const popupContent = document.createElement("div");
