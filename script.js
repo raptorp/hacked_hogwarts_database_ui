@@ -156,7 +156,7 @@ function createTable() {
   const tableBody = document.querySelector("#studentTable tbody");
   tableBody.innerHTML = "";
 
-  // add header cell blah
+  // add eventlisteners to header cells
   const headerCells = document.querySelectorAll("#sorting th");
   headerCells.forEach((cell) =>
     cell.addEventListener("click", () => {
@@ -344,16 +344,16 @@ function showPopup(student, row) {
 
       // Update the prefect status icon in the table
       const statusIcon = "<i class='fa-solid fa-circle-check'></i>";
-      const cellId = `prefect-${student.lastName}-${student.firstName}`;
-      document.getElementById(cellId).innerHTML = statusIcon;
+      const cellIdPrefect = `prefect-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellIdPrefect).innerHTML = statusIcon;
     } else {
       // Decrement the number of prefects in the student's house
       prefectsPerHouse[student.house]--;
 
       // Update the prefect status icon in the table
       const statusIcon = "<i class='fa-solid fa-circle-xmark'></i>";
-      const cellId = `prefect-${student.lastName}-${student.firstName}`;
-      document.getElementById(cellId).innerHTML = statusIcon;
+      const cellIdPrefect = `prefect-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellIdPrefect).innerHTML = statusIcon;
     }
 
     // Update the student object
@@ -369,8 +369,8 @@ function showPopup(student, row) {
       const statusIcon = student.isRacist
         ? "<i class='fa-solid fa-circle-check'></i>"
         : "<i class='fa-solid fa-circle-xmark'></i>";
-      const cellId = `racist-${student.lastName}-${student.firstName}`;
-      document.getElementById(cellId).innerHTML = statusIcon;
+      const cellIdRacist = `racist-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellIdRacist).innerHTML = statusIcon;
     } else {
       // Show the racist dialog box if the student is not a pure-blood
       const racistDialog = document.getElementById("racist-dialog");
@@ -392,13 +392,18 @@ function showPopup(student, row) {
   const toggleSwitchExpelled = clone.querySelector(".toggle-expelled-status");
   toggleSwitchExpelled.checked = student.isExpelled;
   toggleSwitchExpelled.addEventListener("change", () => {
-    if (!student.isExpelled || toggleSwitchExpelled.checked) {
+    if (student.firstName === "Sabrina") {
+      // Show an error message and revert the toggle switch back to its original state
+      alert("Snape says no.");
+      toggleSwitchExpelled.checked = student.isExpelled;
+    } else if (!student.isExpelled || toggleSwitchExpelled.checked) {
+      // Update the student's expelled status and update the UI accordingly
       student.isExpelled = toggleSwitchExpelled.checked;
       const statusIcon = student.isExpelled
         ? "<i class='fa-solid fa-circle-check'></i>"
         : "<i class='fa-solid fa-circle-xmark'></i>";
-      const cellId = `expelled-${student.lastName}-${student.firstName}`;
-      document.getElementById(cellId).innerHTML = statusIcon;
+      const cellIdExpelled = `expelled-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellIdExpelled).innerHTML = statusIcon;
     } else {
       // Show the expelled dialog box if the student is already expelled
       const expelledDialog = document.getElementById("expelled-dialog");
@@ -443,6 +448,31 @@ function hackTheSystem() {
   const filterCheckboxes = document.querySelectorAll(".filter");
   filterCheckboxes.forEach((checkbox) => (checkbox.checked = true));
 
+  // Create a map to store the original blood status of each student
+  const originalBloodStatuses = new Map();
+  cleanedData.forEach((student) => {
+    originalBloodStatuses.set(student, student.bloodStatus);
+  });
+
+  // Randomize the blood status for former pure-bloods
+  const formerPureBloods = cleanedData.filter((student) => {
+    return originalBloodStatuses.get(student) === "pure-blood";
+  });
+  const bloodStatuses = ["half-blood", "mud-blood"];
+  formerPureBloods.forEach((student) => {
+    const randomIndex = Math.floor(Math.random() * bloodStatuses.length);
+    const randomBloodStatus = bloodStatuses[randomIndex];
+    student.bloodStatus = randomBloodStatus;
+  });
+
+  // Set the blood status for half- and muggle-bloods to "pure-blood"
+  const halfAndMuggleBloods = cleanedData.filter((student) => {
+    return originalBloodStatuses.get(student) !== "pure-blood";
+  });
+  halfAndMuggleBloods.forEach((student) => {
+    student.bloodStatus = "pure-blood";
+  });
+
   // Create a new student object with default values
   const newStudent = {
     firstName: "Sabrina",
@@ -456,6 +486,14 @@ function hackTheSystem() {
     isRacist: false,
     isExpelled: false,
   };
+
+  // Toggle off isRacist switch for all students
+  cleanedData.forEach((student) => {
+    student.isRacist = false;
+    const cellIdRacist = `racist-${student.lastName}-${student.firstName}`;
+    document.getElementById(cellIdRacist).innerHTML =
+      "<i class='fa-solid fa-circle-xmark'></i>";
+  });
 
   // Add the new student to the data set
   cleanedData.push(newStudent);

@@ -309,16 +309,13 @@ footer {
 
 header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: end;
-  padding-right: 2rem;
+  padding: 2rem;
   background-color: var(--clr-dark);
   color: var(--clr-lighter);
   height: 10vh;
-}
-
-header h1 {
-  padding-bottom: 0.8rem;
+  justify-content: space-between;
 }
 
 #table_wrapper {
@@ -388,8 +385,6 @@ tr td:nth-child(-n + 3) {
   padding-left: 0.5rem;
 }
 
-/* ***** SCROLL BAR STYLING ***** */
-
 /* ***** FILTER BAR ***** */
 
 #navbar {
@@ -440,14 +435,22 @@ fieldset label {
   margin-bottom: 0.7rem;
 }
 
+#hack-button {
+  color: var(--clr-light);
+  text-transform: uppercase;
+  background-color: var(--clr-mid);
+  font-size: 0.8rem;
+  border: 1px solid var(--clr-light);
+  border-radius: 5px;
+  padding: 0.6rem 0;
+}
+
 #navbar > * > button {
   color: var(--clr-lightest);
   text-transform: uppercase;
   background-color: var(--clr-dark);
   font-size: 0.8rem;
   border: 1px solid var(--clr-dark);
-  /* box-shadow: none; */
-  /* border: 0 solid; */
   border-radius: 5px;
   width: 100%;
   padding: 0.6rem 0;
