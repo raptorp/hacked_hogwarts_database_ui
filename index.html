@@ -12,221 +12,235 @@
     ></script>
   </head>
   <body>
-    <header>
-      <!-- add logo container -->
-      <h1>AULA for Wizards</h1>
-    </header>
-    <main>
-      <template id="popup-template">
-        <!-- <div id="student-card"> -->
-        <div class="card-header">
-          <div class="card-cover"></div>
-          <button
-            class="popup-close-button"
-            onclick="document.querySelector('.popup-overlay').remove()"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-          <img
-            class="student-img"
-            src="img/avatar.jpg"
-            alt="Profile picture of the student"
-          />
-          <p class="name"></p>
-        </div>
-
-        <div id="student-info">
-          <p><strong>House:</strong> <span class="house"></span></p>
-          <p><strong>Bloodstatus:</strong> <span class="bloodstatus"></span></p>
-          <p><strong>Gender:</strong> <span class="gender"></span></p>
-        </div>
-        <div id="toggle-cont">
-          <label class="toggle">
-            <input
-              class="toggle-checkbox toggle-prefect-status"
-              type="checkbox"
-              name="prefect"
+    <div class="site-wrapper">
+      <header>
+        <!-- add logo container -->
+        <h1>AULA for Wizards</h1>
+      </header>
+      <main>
+        <template id="popup-template">
+          <!-- <div id="student-card"> -->
+          <div class="card-header">
+            <div class="card-cover"></div>
+            <button
+              class="popup-close-button"
+              onclick="document.querySelector('.popup-overlay').remove()"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img
+              class="student-img"
+              src="img/avatar.jpg"
+              alt="Profile picture of the student"
             />
-            <div class="toggle-switch"></div>
-            <span class="toggle-label">Prefect</span>
-          </label>
-          <label class="toggle">
-            <input
-              class="toggle-checkbox toggle-racist-status"
-              type="checkbox"
-              name="racist"
-            />
-            <div class="toggle-switch"></div>
-            <span class="toggle-label">Racist</span>
-          </label>
-          <label class="toggle">
-            <input
-              class="toggle-checkbox toggle-expelled-status"
-              type="checkbox"
-              name="expelled"
-            />
-            <div class="toggle-switch"></div>
-            <span class="toggle-label">Expelled</span>
-          </label>
-        </div>
-        <!-- </div> -->
-      </template>
+            <p class="name"></p>
+          </div>
 
-      <nav id="navbar">
-        <div
-          id="filter-buttons"
-          onclick="return filterStudents(this);"
-          oninput="return filterStudents(this);"
-        >
-          <input id="search-bar" placeholder="search..." />
-          <fieldset>
-            <legend>Houses</legend>
-
+          <div id="student-info">
+            <p><strong>House:</strong> <span class="house"></span></p>
+            <p>
+              <strong>Bloodstatus:</strong> <span class="bloodstatus"></span>
+            </p>
+            <p><strong>Gender:</strong> <span class="gender"></span></p>
+          </div>
+          <div id="toggle-cont">
             <label class="toggle">
               <input
-                checked
-                class="toggle-checkbox filter"
+                class="toggle-checkbox toggle-prefect-status"
                 type="checkbox"
-                name="hufflepuff"
+                name="prefect"
               />
               <div class="toggle-switch"></div>
-              <span class="toggle-label">Hufflepuff</span>
+              <span class="toggle-label">Prefect</span>
             </label>
             <label class="toggle">
               <input
-                checked
-                class="toggle-checkbox filter"
+                class="toggle-checkbox toggle-racist-status"
                 type="checkbox"
-                name="slytherin"
+                name="racist"
               />
               <div class="toggle-switch"></div>
-              <span class="toggle-label">Slytherin</span>
+              <span class="toggle-label">Racist</span>
             </label>
             <label class="toggle">
               <input
-                checked
-                class="toggle-checkbox filter"
+                class="toggle-checkbox toggle-expelled-status"
                 type="checkbox"
-                name="ravenclaw"
-              />
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Ravenclaw</span>
-            </label>
-            <label class="toggle">
-              <input
-                checked
-                class="toggle-checkbox filter"
-                type="checkbox"
-                name="gryffindor"
-              />
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Gryffindor</span>
-            </label>
-          </fieldset>
-          <fieldset>
-            <legend>Gender</legend>
-            <label class="toggle">
-              <input
-                checked
-                class="toggle-checkbox filter"
-                type="checkbox"
-                name="girl"
-              />
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">
-                Girls
-                <i class="fas fa-venus"></i>
-              </span>
-            </label>
-            <label class="toggle">
-              <input
-                checked
-                class="toggle-checkbox filter"
-                type="checkbox"
-                name="boy"
-              />
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">
-                Boys
-                <i class="fas fa-mars"></i>
-              </span>
-            </label>
-          </fieldset>
-          <fieldset>
-            <legend>Status</legend>
-            <label class="toggle">
-              <input
-                checked
-                class="toggle-checkbox filter"
-                type="checkbox"
-                name="isPrefect"
-              />
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Prefects</span>
-            </label>
-            <label class="toggle">
-              <input
-                checked
-                class="toggle-checkbox filter"
-                type="checkbox"
-                name="isRacist"
-              />
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Racists</span>
-            </label>
-            <label class="toggle">
-              <input
-                checked
-                class="toggle-checkbox filter"
-                type="checkbox"
-                name="isExpelled"
+                name="expelled"
               />
               <div class="toggle-switch"></div>
               <span class="toggle-label">Expelled</span>
             </label>
-          </fieldset>
+          </div>
+          <!-- </div> -->
+        </template>
 
-          <button class="filter" data-filter="all">show all students</button>
-        </div>
-        <p id="studentCount">0 students currently listed</p>
-      </nav>
-      <div id="con">
-        <table id="studentTable">
-          <thead>
-            <tr id="sorting">
-              <th data-sort-direction="asc" data-sort="house">House</th>
-              <th data-sort-direction="asc" data-sort="lastName">Last Name</th>
-              <th data-sort-direction="asc" data-sort="firstName">
-                First Name
-              </th>
-              <th data-sort-direction="asc" data-sort="gender">Gender</th>
-              <th data-sort-direction="asc" data-sort="isPrefect">Prefect</th>
-              <th data-sort-direction="asc" data-sort="racist">Racist</th>
-              <th data-sort-direction="asc" data-sort="expelled">Expelled</th>
+        <div class="ui-wrapper">
+          <nav id="navbar">
+            <div
+              id="filter-buttons"
+              onclick="return filterStudents(this);"
+              oninput="return filterStudents(this);"
+            >
+              <input id="search-bar" placeholder="search..." />
+              <fieldset>
+                <legend>Houses</legend>
+
+                <label class="toggle">
+                  <input
+                    checked
+                    class="toggle-checkbox filter"
+                    type="checkbox"
+                    name="hufflepuff"
+                  />
+                  <div class="toggle-switch"></div>
+                  <span class="toggle-label">Hufflepuff</span>
+                </label>
+                <label class="toggle">
+                  <input
+                    checked
+                    class="toggle-checkbox filter"
+                    type="checkbox"
+                    name="slytherin"
+                  />
+                  <div class="toggle-switch"></div>
+                  <span class="toggle-label">Slytherin</span>
+                </label>
+                <label class="toggle">
+                  <input
+                    checked
+                    class="toggle-checkbox filter"
+                    type="checkbox"
+                    name="ravenclaw"
+                  />
+                  <div class="toggle-switch"></div>
+                  <span class="toggle-label">Ravenclaw</span>
+                </label>
+                <label class="toggle">
+                  <input
+                    checked
+                    class="toggle-checkbox filter"
+                    type="checkbox"
+                    name="gryffindor"
+                  />
+                  <div class="toggle-switch"></div>
+                  <span class="toggle-label">Gryffindor</span>
+                </label>
+              </fieldset>
+              <fieldset>
+                <legend>Gender</legend>
+                <label class="toggle">
+                  <input
+                    checked
+                    class="toggle-checkbox filter"
+                    type="checkbox"
+                    name="girl"
+                  />
+                  <div class="toggle-switch"></div>
+                  <span class="toggle-label">
+                    Girls
+                    <i class="fas fa-venus"></i>
+                  </span>
+                </label>
+                <label class="toggle">
+                  <input
+                    checked
+                    class="toggle-checkbox filter"
+                    type="checkbox"
+                    name="boy"
+                  />
+                  <div class="toggle-switch"></div>
+                  <span class="toggle-label">
+                    Boys
+                    <i class="fas fa-mars"></i>
+                  </span>
+                </label>
+              </fieldset>
+              <fieldset>
+                <legend>Status</legend>
+                <label class="toggle">
+                  <input
+                    checked
+                    class="toggle-checkbox filter"
+                    type="checkbox"
+                    name="isPrefect"
+                  />
+                  <div class="toggle-switch"></div>
+                  <span class="toggle-label">Prefects</span>
+                </label>
+                <label class="toggle">
+                  <input
+                    checked
+                    class="toggle-checkbox filter"
+                    type="checkbox"
+                    name="isRacist"
+                  />
+                  <div class="toggle-switch"></div>
+                  <span class="toggle-label">Racists</span>
+                </label>
+                <label class="toggle">
+                  <input
+                    checked
+                    class="toggle-checkbox filter"
+                    type="checkbox"
+                    name="isExpelled"
+                  />
+                  <div class="toggle-switch"></div>
+                  <span class="toggle-label">Expelled</span>
+                </label>
+              </fieldset>
+
+              <button class="filter" data-filter="all">
+                show all students
+              </button>
+            </div>
+            <p id="studentCount">0 students currently listed</p>
+          </nav>
+          <div id="table_wrapper">
+            <table id="studentTable">
+              <thead>
+                <tr id="sorting">
+                  <th data-sort-direction="asc" data-sort="house">House</th>
+                  <th data-sort-direction="asc" data-sort="lastName">
+                    Last Name
+                  </th>
+                  <th data-sort-direction="asc" data-sort="firstName">
+                    First Name
+                  </th>
+                  <th data-sort-direction="asc" data-sort="gender">Gender</th>
+                  <th data-sort-direction="asc" data-sort="isPrefect">
+                    Prefect
+                  </th>
+                  <th data-sort-direction="asc" data-sort="racist">Racist</th>
+                  <th data-sort-direction="asc" data-sort="expelled">
+                    Expelled
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <!-- table row template will be inserted here by js -->
+              </tbody>
+            </table>
+          </div>
+
+          <template id="table-row-template">
+            <tr>
+              <td class="house"></td>
+              <td class="last-name"></td>
+              <td class="first-name"></td>
+              <td class="gender"></td>
+              <td class="isPrefect"></td>
+              <td class="isRacist"></td>
+              <td class="isExpelled"></td>
             </tr>
-          </thead>
-
-          <tbody>
-            <!-- table row template will be inserted here by js -->
-          </tbody>
-        </table>
-      </div>
-
-      <template id="table-row-template">
-        <tr>
-          <td class="house"></td>
-          <td class="last-name"></td>
-          <td class="first-name"></td>
-          <td class="gender"></td>
-          <td class="isPrefect"></td>
-          <td class="isRacist"></td>
-          <td class="isExpelled"></td>
-        </tr>
-      </template>
-    </main>
-    <footer>
-      <p><i class="fa-regular fa-copyright"></i> 2023 AULA for Wizards</p>
-    </footer>
+          </template>
+        </div>
+      </main>
+      <footer>
+        <p><i class="fa-regular fa-copyright"></i> 2023 AULA for Wizards</p>
+      </footer>
+    </div>
 
     <script defer src="script.js"></script>
   </body>

@@ -54,23 +54,33 @@
   box-sizing: border-box;
 }
 
-/* html {
-  line-height: 1.15;
-} */
-
 body {
   font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto",
     "Segoe UI", sans-serif;
 }
 
+.site-wrapper {
+  max-width: 90vw;
+  max-height: 80vh;
+  margin: 2rem auto;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--clr-light);
+}
+
 main {
+  height: 100%;
+}
+
+.ui-wrapper {
   display: flex;
+  height: 70vh;
 }
 
 th {
   background-color: var(--clr-light);
   height: 2.5rem;
-  width: 8rem;
+  width: calc(100% / 7);
 }
 
 /* ***** POP UP ***** */
@@ -296,15 +306,21 @@ header {
   padding-right: 2rem;
   background-color: var(--clr-dark);
   color: var(--clr-lighter);
-  height: 8vh;
+  height: 10vh;
 }
 
 header h1 {
   padding-bottom: 0.8rem;
 }
 
-#con {
-  padding: 0.5rem 2rem;
+#table_wrapper {
+  width: 100%;
+  overflow: auto;
+}
+
+#studentTable {
+  width: 100%;
+  border-collapse: collapse;
 }
 
 /* ***** ROW ICONS ***** */
@@ -327,19 +343,19 @@ td.gender,
 /* ***** HOUSE COLORS IN CELLS ***** */
 
 tr.slytherin > .house {
-  background-color: var(--slyth-green-hue);
+  border-left: 0.75rem solid var(--slyth-dark-green-hue);
 }
 
 tr.gryffindor > .house {
-  background-color: var(--gryf-dark-red-hue);
+  border-left: 0.75rem solid var(--gryf-dark-red-hue);
 }
 
 tr.hufflepuff > .house {
-  background-color: var(--huff-yellow-hue);
+  border-left: 0.75rem solid var(--huff-yellow-hue);
 }
 
 tr.ravenclaw > .house {
-  background-color: var(--raven-dark-blue-hue);
+  border-left: 0.75rem solid var(--raven-dark-blue-hue);
 }
 
 /* ***** CELLS ***** */
@@ -347,9 +363,21 @@ tr {
   height: 1.8rem;
 }
 
-td {
-  padding-left: 0.25rem;
+tr:nth-child(2n) {
+  background: var(--clr-lighter);
 }
+
+tr:last-of-type {
+  border-bottom: 1px solid var(--clr-lighter);
+}
+
+td {
+  padding-left: 0.5rem;
+  border-right: 1px solid var(--clr-lighter);
+  height: 2.25rem;
+}
+
+/* ***** SCROLL BAR STYLING ***** */
 
 /* ***** FILTER BAR ***** */
 
@@ -360,11 +388,11 @@ td {
   width: 16rem;
   background-color: var(--clr-lighter);
   padding: 1.5rem 2rem;
-  border: 1px solid var(--clr-light);
+  border-right: 1px solid var(--clr-light);
 }
 
 #navbar p {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   text-align: right;
 }
 
