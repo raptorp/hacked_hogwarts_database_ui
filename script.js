@@ -156,7 +156,7 @@ function createTable() {
   const tableBody = document.querySelector("#studentTable tbody");
   tableBody.innerHTML = "";
 
-  // add header cell blah
+  // add eventlisteners to header cells
   const headerCells = document.querySelectorAll("#sorting th");
   headerCells.forEach((cell) =>
     cell.addEventListener("click", () => {
@@ -195,15 +195,15 @@ function createTableRows(data) {
 
       let isPrefectDom = row.querySelector(".isPrefect"); // give each prefect cell a unique id so it can be reached in the pop-up
       isPrefectDom.textContent = student.isPrefect;
-      isPrefectDom.id = `prefect-${index}`;
+      isPrefectDom.id = `prefect-${student.lastName}-${student.firstName}`;
 
       let isRacistDom = row.querySelector(".isRacist"); // give each racist cell a unique id so it can be reached in the pop-up
       isRacistDom.textContent = student.isRacist;
-      isRacistDom.id = `racist-${index}`;
+      isRacistDom.id = `racist-${student.lastName}-${student.firstName}`;
 
       let isExpelledDom = row.querySelector(".isExpelled"); // give each expelled cell a unique id so it can be reached in the pop-up
       isExpelledDom.textContent = student.isExpelled;
-      isExpelledDom.id = `expelled-${index}`;
+      isExpelledDom.id = `expelled-${student.lastName}-${student.firstName}`;
 
       // create gender icon and update the gender text with the icon
       const genderIcon =
@@ -214,18 +214,18 @@ function createTableRows(data) {
 
       // create true/false icons for student status and update the text with the icon
       const prefectStatus = student.isPrefect
-        ? "<i class='far fa-circle-check'></i>"
-        : "<i class='far fa-circle-xmark'></i>";
+        ? "<i class='fa-solid fa-circle-check'></i>"
+        : "<i class='fa-solid fa-circle-xmark'></i>";
       row.querySelector(".isPrefect").innerHTML = prefectStatus;
 
       const racistStatus = student.isRacist
-        ? "<i class='far fa-circle-check'></i>"
-        : "<i class='far fa-circle-xmark'></i>";
+        ? "<i class='fa-solid fa-circle-check'></i>"
+        : "<i class='fa-solid fa-circle-xmark'></i>";
       row.querySelector(".isRacist").innerHTML = racistStatus;
 
       const expelledStatus = student.isExpelled
-        ? "<i class='far fa-circle-check'></i>"
-        : "<i class='far fa-circle-xmark'></i>";
+        ? "<i class='fa-solid fa-circle-check'></i>"
+        : "<i class='fa-solid fa-circle-xmark'></i>";
       row.querySelector(".isExpelled").innerHTML = expelledStatus;
 
       // add appropriate class to row based on student's house
@@ -233,6 +233,13 @@ function createTableRows(data) {
 
       // add appropriate class to row based on student's gender
       row.querySelector("tr").classList.add(student.gender.toLowerCase());
+
+      // add appropriate class to row based on student's blood status
+      if (student.bloodStatus) {
+        row
+          .querySelector("tr")
+          .classList.add(student.bloodStatus.toLowerCase());
+      }
 
       // add click event listener to row to display popup
       row.querySelector(".first-name").addEventListener("click", () => {
@@ -247,6 +254,13 @@ function createTableRows(data) {
 
   updateStudentCount();
 }
+
+const prefectsPerHouse = {
+  gryffindor: 0,
+  hufflepuff: 0,
+  ravenclaw: 0,
+  slytherin: 0,
+};
 
 function showPopup(student, row) {
   // retrieve popup template
@@ -265,78 +279,159 @@ function showPopup(student, row) {
 
   clone.querySelector(".name").textContent = name;
   clone.querySelector(".house").textContent = student.house;
+  clone.querySelector(".bloodstatus").textContent = student.bloodStatus;
   const genderIcon =
     student.gender === "girl"
       ? "<i class='fas fa-venus'></i>"
       : "<i class='fas fa-mars'></i>";
   clone.querySelector(".gender").innerHTML = genderIcon;
 
-  clone.querySelector(".bloodstatus").textContent = student.bloodStatus;
-
   // create image filename from student's name
-  const imageFilename = `img/${student.lastName}_${student.firstName.charAt(
-    0
-  )}.png`;
-  clone.querySelector(".student-img").src = imageFilename;
+  let imageFilename;
+
+  if (student.lastName.includes("-")) {
+    const parts = student.lastName.split("-");
+    const lastName = parts[parts.length - 1];
+    imageFilename = `img/${lastName}_${student.firstName.charAt(0)}.png`;
+  } else if (student.lastName === "Patil") {
+    imageFilename = `img/${student.lastName}_${student.firstName}.png`;
+  } else {
+    imageFilename = `img/${student.lastName}_${student.firstName.charAt(
+      0
+    )}.png`;
+  }
+
+  const imgElement = clone.querySelector(".student-img");
+
+  // Check if the image file exists, and if not, display a default image
+  fetch(imageFilename)
+    .then((response) => {
+      if (!response.ok) {
+        imgElement.src = "img/avatar.jpg";
+      } else {
+        imgElement.src = imageFilename;
+      }
+    })
+    .catch(() => {
+      imgElement.src = "img/avatar.jpg";
+    });
 
   // add toggle switch event listener for isPrefect
   const toggleSwitchPrefect = clone.querySelector(".toggle-prefect-status");
   toggleSwitchPrefect.checked = student.isPrefect;
   toggleSwitchPrefect.addEventListener("change", () => {
+    if (toggleSwitchPrefect.checked) {
+      // Check if the limit of 2 prefects per house has been reached
+      if (prefectsPerHouse[student.house] >= 2) {
+        // Show the prefect limit dialog box
+        const prefectLimitDialog = document.getElementById("prefect-dialog");
+        prefectLimitDialog.style.display = "flex";
+
+        // Add an event listener to the OK button that hides the dialog box when it's clicked
+        const okButton = prefectLimitDialog.querySelector("button");
+        okButton.addEventListener("click", () => {
+          prefectLimitDialog.style.display = "none";
+        });
+
+        // Set the toggle switch back to unchecked and update the student object
+        toggleSwitchPrefect.checked = false;
+        student.isPrefect = false;
+        return;
+      }
+
+      // Increment the number of prefects in the student's house
+      prefectsPerHouse[student.house]++;
+
+      // Update the prefect status icon in the table
+      const statusIcon = "<i class='fa-solid fa-circle-check'></i>";
+      const cellIdPrefect = `prefect-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellIdPrefect).innerHTML = statusIcon;
+    } else {
+      // Decrement the number of prefects in the student's house
+      prefectsPerHouse[student.house]--;
+
+      // Update the prefect status icon in the table
+      const statusIcon = "<i class='fa-solid fa-circle-xmark'></i>";
+      const cellIdPrefect = `prefect-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellIdPrefect).innerHTML = statusIcon;
+    }
+
+    // Update the student object
     student.isPrefect = toggleSwitchPrefect.checked;
-    const statusIcon = student.isPrefect
-      ? "<i class='far fa-circle-check'></i>"
-      : "<i class='far fa-circle-xmark'></i>";
-    const cellId = `prefect-${cleanedData.indexOf(student)}`;
-    document.getElementById(cellId).innerHTML = statusIcon;
   });
 
   // add toggle switch event listener for isRacist
   const toggleSwitchRacist = clone.querySelector(".toggle-racist-status");
   toggleSwitchRacist.checked = student.isRacist;
   toggleSwitchRacist.addEventListener("change", () => {
-    student.isRacist = toggleSwitchRacist.checked;
-    const statusIcon = student.isRacist
-      ? "<i class='far fa-circle-check'></i>"
-      : "<i class='far fa-circle-xmark'></i>";
-    const cellId = `racist-${cleanedData.indexOf(student)}`;
-    document.getElementById(cellId).innerHTML = statusIcon;
+    if (student.bloodStatus === "pure-blood") {
+      student.isRacist = toggleSwitchRacist.checked;
+      const statusIcon = student.isRacist
+        ? "<i class='fa-solid fa-circle-check'></i>"
+        : "<i class='fa-solid fa-circle-xmark'></i>";
+      const cellIdRacist = `racist-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellIdRacist).innerHTML = statusIcon;
+    } else {
+      // Show the racist dialog box if the student is not a pure-blood
+      const racistDialog = document.getElementById("racist-dialog");
+      racistDialog.style.display = "flex";
+
+      // Add an event listener to the OK button that hides the dialog box when it's clicked
+      const okButton = racistDialog.querySelector("button");
+      okButton.addEventListener("click", () => {
+        racistDialog.style.display = "none";
+      });
+
+      // Set the toggle switch back to unchecked and update the student object
+      toggleSwitchRacist.checked = false;
+      student.isRacist = false;
+    }
   });
 
   // add toggle switch event listener for isExpelled
   const toggleSwitchExpelled = clone.querySelector(".toggle-expelled-status");
   toggleSwitchExpelled.checked = student.isExpelled;
   toggleSwitchExpelled.addEventListener("change", () => {
-    student.isExpelled = toggleSwitchExpelled.checked;
-    const statusIcon = student.isExpelled
-      ? "<i class='far fa-circle-check'></i>"
-      : "<i class='far fa-circle-xmark'></i>";
-    const cellId = `expelled-${cleanedData.indexOf(student)}`;
-    document.getElementById(cellId).innerHTML = statusIcon;
+    if (student.firstName === "Sabrina") {
+      // Show an error message and revert the toggle switch back to its original state
+      alert("Snape says no.");
+      toggleSwitchExpelled.checked = student.isExpelled;
+    } else if (!student.isExpelled || toggleSwitchExpelled.checked) {
+      // Update the student's expelled status and update the UI accordingly
+      student.isExpelled = toggleSwitchExpelled.checked;
+      const statusIcon = student.isExpelled
+        ? "<i class='fa-solid fa-circle-check'></i>"
+        : "<i class='fa-solid fa-circle-xmark'></i>";
+      const cellIdExpelled = `expelled-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellIdExpelled).innerHTML = statusIcon;
+    } else {
+      // Show the expelled dialog box if the student is already expelled
+      const expelledDialog = document.getElementById("expelled-dialog");
+      expelledDialog.style.display = "flex";
+
+      // Add an event listener to the OK button that hides the dialog box when it's clicked
+      const okButton = expelledDialog.querySelector("button");
+      okButton.addEventListener("click", () => {
+        expelledDialog.style.display = "none";
+      });
+
+      // Set the toggle switch back to checked and update the student object
+      toggleSwitchExpelled.checked = true;
+      student.isExpelled = true;
+    }
   });
 
   // create popup overlay
   const popupOverlay = document.createElement("div");
   popupOverlay.classList.add("popup-overlay");
 
+  // change the cardcover depending on the class of the student
+  popupOverlay.classList.add(`popup-${student.house}`);
+
   // create popup container
   const popupContainer = document.createElement("div");
   popupContainer.classList.add("popup-container");
   popupOverlay.appendChild(popupContainer);
-
-  // create popup header
-  const popupHeader = document.createElement("div");
-  popupHeader.classList.add("popup-header");
-  popupContainer.appendChild(popupHeader);
-
-  // create popup close button
-  const closeButton = document.createElement("button");
-  closeButton.classList.add("popup-close-button");
-  closeButton.textContent = "x";
-  closeButton.addEventListener("click", () => {
-    popupOverlay.remove();
-  });
-  popupHeader.appendChild(closeButton);
 
   // append cloned template to popup content
   const popupContent = document.createElement("div");
@@ -346,6 +441,62 @@ function showPopup(student, row) {
 
   // add popup to the DOM
   document.body.appendChild(popupOverlay);
+}
+
+function hackTheSystem() {
+  // Reset filter buttons to hide the new student better
+  const filterCheckboxes = document.querySelectorAll(".filter");
+  filterCheckboxes.forEach((checkbox) => (checkbox.checked = true));
+
+  // Create a map to store the original blood status of each student
+  const originalBloodStatuses = new Map();
+  cleanedData.forEach((student) => {
+    originalBloodStatuses.set(student, student.bloodStatus);
+  });
+
+  // Randomize the blood status for former pure-bloods
+  const formerPureBloods = cleanedData.filter((student) => {
+    return originalBloodStatuses.get(student) === "pure-blood";
+  });
+  const bloodStatuses = ["half-blood", "mud-blood"];
+  formerPureBloods.forEach((student) => {
+    const randomIndex = Math.floor(Math.random() * bloodStatuses.length);
+    const randomBloodStatus = bloodStatuses[randomIndex];
+    student.bloodStatus = randomBloodStatus;
+  });
+
+  // Set the blood status for half- and muggle-bloods to "pure-blood"
+  const halfAndMuggleBloods = cleanedData.filter((student) => {
+    return originalBloodStatuses.get(student) !== "pure-blood";
+  });
+  halfAndMuggleBloods.forEach((student) => {
+    student.bloodStatus = "pure-blood";
+  });
+
+  // Create a new student object with default values
+  const newStudent = {
+    firstName: "Sabrina",
+    middleName: "",
+    nickname: "The Menace",
+    lastName: "Sorensen",
+    gender: "girl",
+    house: "slytherin",
+    bloodStatus: "mud-blood",
+    isPrefect: false,
+    isRacist: false,
+    isExpelled: false,
+  };
+
+  // Toggle off isRacist switch for all students
+  cleanedData.forEach((student) => {
+    student.isRacist = false;
+    const cellIdRacist = `racist-${student.lastName}-${student.firstName}`;
+    document.getElementById(cellIdRacist).innerHTML =
+      "<i class='fa-solid fa-circle-xmark'></i>";
+  });
+
+  // Add the new student to the data set
+  cleanedData.push(newStudent);
 }
 
 async function start() {
@@ -362,4 +513,7 @@ async function start() {
 
   createTable();
   createTableRows(cleanedData);
+
+  const hackButton = document.querySelector("#hack-button");
+  hackButton.addEventListener("click", hackTheSystem);
 }
