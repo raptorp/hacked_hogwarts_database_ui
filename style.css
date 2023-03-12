@@ -499,7 +499,21 @@ fieldset label {
   justify-content: center;
   width: 498px;
   height: 280px;
-  background-image: url(/snape/obvi.gif);
+  background-image: url(/snape/obviously.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#prefect-limit-dialog .dialog-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 640px;
+  height: 564px;
+  background-image: url(/snape/slap.gif);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

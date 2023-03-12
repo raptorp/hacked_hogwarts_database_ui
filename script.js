@@ -195,15 +195,15 @@ function createTableRows(data) {
 
       let isPrefectDom = row.querySelector(".isPrefect"); // give each prefect cell a unique id so it can be reached in the pop-up
       isPrefectDom.textContent = student.isPrefect;
-      isPrefectDom.id = `prefect-${index}`;
+      isPrefectDom.id = `prefect-${student.lastName}-${student.firstName}`;
 
       let isRacistDom = row.querySelector(".isRacist"); // give each racist cell a unique id so it can be reached in the pop-up
       isRacistDom.textContent = student.isRacist;
-      isRacistDom.id = `racist-${index}`;
+      isRacistDom.id = `racist-${student.lastName}-${student.firstName}`;
 
       let isExpelledDom = row.querySelector(".isExpelled"); // give each expelled cell a unique id so it can be reached in the pop-up
       isExpelledDom.textContent = student.isExpelled;
-      isExpelledDom.id = `expelled-${index}`;
+      isExpelledDom.id = `expelled-${student.lastName}-${student.firstName}`;
 
       // create gender icon and update the gender text with the icon
       const genderIcon =
@@ -317,7 +317,7 @@ function showPopup(student, row) {
     const statusIcon = student.isPrefect
       ? "<i class='fa-solid fa-circle-check'></i>"
       : "<i class='fa-solid fa-circle-xmark'></i>";
-    const cellId = `prefect-${cleanedData.indexOf(student)}`;
+    const cellId = `prefect-${student.lastName}-${student.firstName}`;
     document.getElementById(cellId).innerHTML = statusIcon;
   });
 
@@ -330,7 +330,7 @@ function showPopup(student, row) {
       const statusIcon = student.isRacist
         ? "<i class='fa-solid fa-circle-check'></i>"
         : "<i class='fa-solid fa-circle-xmark'></i>";
-      const cellId = `racist-${cleanedData.indexOf(student)}`;
+      const cellId = `racist-${student.lastName}-${student.firstName}`;
       document.getElementById(cellId).innerHTML = statusIcon;
     } else {
       // Show the racist dialog box if the student is not a pure-blood
@@ -361,7 +361,7 @@ function showPopup(student, row) {
     const statusIcon = student.isExpelled
       ? "<i class='fa-solid fa-circle-check'></i>"
       : "<i class='fa-solid fa-circle-xmark'></i>";
-    const cellId = `expelled-${cleanedData.indexOf(student)}`;
+    const cellId = `expelled-${student.lastName}-${student.firstName}`;
     document.getElementById(cellId).innerHTML = statusIcon;
   });
 
