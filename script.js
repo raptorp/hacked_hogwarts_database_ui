@@ -214,18 +214,18 @@ function createTableRows(data) {
 
       // create true/false icons for student status and update the text with the icon
       const prefectStatus = student.isPrefect
-        ? "<i class='far fa-circle-check'></i>"
-        : "<i class='far fa-circle-xmark'></i>";
+        ? "<i class='fa-solid fa-circle-check'></i>"
+        : "<i class='fa-solid fa-circle-xmark'></i>";
       row.querySelector(".isPrefect").innerHTML = prefectStatus;
 
       const racistStatus = student.isRacist
-        ? "<i class='far fa-circle-check'></i>"
-        : "<i class='far fa-circle-xmark'></i>";
+        ? "<i class='fa-solid fa-circle-check'></i>"
+        : "<i class='fa-solid fa-circle-xmark'></i>";
       row.querySelector(".isRacist").innerHTML = racistStatus;
 
       const expelledStatus = student.isExpelled
-        ? "<i class='far fa-circle-check'></i>"
-        : "<i class='far fa-circle-xmark'></i>";
+        ? "<i class='fa-solid fa-circle-check'></i>"
+        : "<i class='fa-solid fa-circle-xmark'></i>";
       row.querySelector(".isExpelled").innerHTML = expelledStatus;
 
       // add appropriate class to row based on student's house
@@ -308,8 +308,8 @@ function showPopup(student, row) {
   toggleSwitchPrefect.addEventListener("change", () => {
     student.isPrefect = toggleSwitchPrefect.checked;
     const statusIcon = student.isPrefect
-      ? "<i class='far fa-circle-check'></i>"
-      : "<i class='far fa-circle-xmark'></i>";
+      ? "<i class='fa-solid fa-circle-check'></i>"
+      : "<i class='fa-solid fa-circle-xmark'></i>";
     const cellId = `prefect-${cleanedData.indexOf(student)}`;
     document.getElementById(cellId).innerHTML = statusIcon;
   });
@@ -320,8 +320,8 @@ function showPopup(student, row) {
   toggleSwitchRacist.addEventListener("change", () => {
     student.isRacist = toggleSwitchRacist.checked;
     const statusIcon = student.isRacist
-      ? "<i class='far fa-circle-check'></i>"
-      : "<i class='far fa-circle-xmark'></i>";
+      ? "<i class='fa-solid fa-circle-check'></i>"
+      : "<i class='fa-solid fa-circle-xmark'></i>";
     const cellId = `racist-${cleanedData.indexOf(student)}`;
     document.getElementById(cellId).innerHTML = statusIcon;
   });
@@ -332,8 +332,8 @@ function showPopup(student, row) {
   toggleSwitchExpelled.addEventListener("change", () => {
     student.isExpelled = toggleSwitchExpelled.checked;
     const statusIcon = student.isExpelled
-      ? "<i class='far fa-circle-check'></i>"
-      : "<i class='far fa-circle-xmark'></i>";
+      ? "<i class='fa-solid fa-circle-check'></i>"
+      : "<i class='fa-solid fa-circle-xmark'></i>";
     const cellId = `expelled-${cleanedData.indexOf(student)}`;
     document.getElementById(cellId).innerHTML = statusIcon;
   });

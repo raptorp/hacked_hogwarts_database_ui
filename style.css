@@ -9,7 +9,7 @@
 
   /* Slytherin */
   --slyth-dark-green: #1a472a;
-  --slyth-dark-green-hue: #1a472a80;
+  --slyth-dark-green-hue: #1a472a99;
   --slyth-green: #2a623d;
   --slyth-green-hue: #2a623d80;
   --slyth-dark-silver: #5d5d5d;
@@ -101,14 +101,6 @@ th {
   border-radius: 5px;
   box-shadow: 0 0 0 0.4rem rgba(255, 255, 255, 0.2);
 }
-
-/* .popup-header { */
-/* position: relative; */
-/* display: flex; */
-/* justify-content: space-between; */
-/* align-items: center; */
-/* margin-bottom: 20px; */
-/* } */
 
 .popup-close-button {
   position: absolute;
@@ -318,11 +310,11 @@ header h1 {
 /* ***** ROW ICONS ***** */
 
 .fa-circle-check {
-  color: var(--slyth-dark-green);
+  color: var(--slyth-dark-green-hue);
 }
 
 .fa-circle-xmark {
-  color: var(--gryf-dark-red);
+  color: var(--gryf-dark-red-hue);
 }
 
 td.gender,
