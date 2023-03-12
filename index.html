@@ -68,13 +68,12 @@
       </template>
 
       <nav id="navbar">
-        <div id="filter-buttons" onclick="return filterStudents(this);">
-          <input
-            id="search-bar"
-            placeholder="search..."
-            oninput="return
-          filterStudents(this.parentElement);"
-          />
+        <div
+          id="filter-buttons"
+          onclick="return filterStudents(this);"
+          oninput="return filterStudents(this);"
+        >
+          <input id="search-bar" placeholder="search..." />
           <fieldset>
             <legend>Houses</legend>
 
