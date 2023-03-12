@@ -37,6 +37,7 @@
   --clr-mid: #a5a5a5;
   --clr-light: #cccccc;
   --clr-lighter: #f2f2f2;
+  --clr-lightest: #ffffff;
 
   /* fonts */
 
@@ -130,22 +131,23 @@ th {
 
 .toggle-switch {
   display: inline-block;
-  /* background: #cccccc; */
+  background: var(--clr-lightest);
   border-radius: 16px;
-  box-shadow: 0 0 0 0.07rem inset;
+  box-shadow: 0 0 0 0.07rem inset var(--clr-darker);
   width: 2.538rem;
   height: 1.4rem;
   position: relative;
   vertical-align: middle;
   transition: background 0.25s;
 }
+
 .toggle-switch:before,
 .toggle-switch:after {
   content: "";
 }
 .toggle-switch:before {
   display: block;
-  background: var(--clr-darkest);
+  background: var(--clr-darker);
   border-radius: 50%;
   width: 1.05rem;
   height: 1.05rem;
@@ -155,10 +157,10 @@ th {
   transition: left 0.25s;
 }
 .toggle:hover .toggle-switch:before {
-  background: var(--clr-mid);
+  background: var(--clr-darker);
 }
 .toggle-checkbox:checked + .toggle-switch {
-  background: var(--slyth-dark-green-hue);
+  background: var(--clr-mid);
 }
 .toggle-checkbox:checked + .toggle-switch:before {
   left: 1.313rem;
@@ -173,6 +175,11 @@ th {
   margin-left: 0.313rem;
   position: relative;
   top: 0.088rem;
+  color: var(--clr-darkest);
+}
+
+.toggle-label i {
+  color: var(--clr-darker);
 }
 
 /* ***** CAPITALIZE NAMES ***** */
@@ -192,8 +199,15 @@ footer {
 header {
   display: flex;
   justify-content: flex-end;
+  align-items: end;
   padding-right: 2rem;
-  background-color: #5d5d5d;
+  background-color: var(--clr-dark);
+  color: var(--clr-lighter);
+  height: 8vh;
+}
+
+header h1 {
+  padding-bottom: 0.8rem;
 }
 
 #con {
@@ -216,13 +230,6 @@ td.gender,
 .isExpelled {
   text-align: center;
 }
-
-/* td.isPrefect > .fa-circle-xmark {
-  background-color: var(--gryf-dark-red-hue);
-  padding: auto;
-  width: 100%;
-  height: 100%;
-} */
 
 /* ***** HOUSE COLORS IN CELLS ***** */
 
@@ -251,24 +258,64 @@ td {
   padding-left: 0.25rem;
 }
 
-/* ***** NAV/FILTER BAR THINGIE ***** */
+/* ***** FILTER BAR ***** */
 
 #navbar {
-  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 16rem;
   background-color: var(--clr-lighter);
-  padding: 1.25rem;
+  padding: 1.5rem 2rem;
   border: 1px solid var(--clr-light);
+}
+
+#navbar p {
+  font-size: 0.9rem;
+  text-align: right;
 }
 
 fieldset {
   border: 1px solid var(--clr-mid);
   border-radius: 5px;
   width: 100%;
-  padding: 0 0.7rem 0.7rem;
+  padding: 0 0.8rem 0.8rem;
+  margin-bottom: 0.8rem;
 }
 
 legend {
-  font-size: 1rem;
+  font-size: 1.25rem;
   padding: 0 0.35rem;
+  /* padding-bottom: 1.25rem; */
   color: var(--clr-darker);
+}
+
+fieldset label:first-of-type {
+  margin-top: 1rem;
+}
+
+fieldset label {
+  margin-bottom: 0.6rem;
+}
+
+#search-bar {
+  background-color: var(--clr-lightest);
+  font-size: 1rem;
+  border: 1px solid var(--clr-mid);
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.35rem 0.7rem;
+}
+
+#navbar > * > button {
+  color: var(--clr-lightest);
+  text-transform: uppercase;
+  background-color: var(--clr-dark);
+  font-size: 0.8rem;
+  border: 1px solid var(--clr-dark);
+  /* box-shadow: none; */
+  /* border: 0 solid; */
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.6rem 0;
 }

@@ -50,7 +50,7 @@
                     name="racist"
                   />
                   <div class="toggle-switch"></div>
-                  <span class="toggle-label">Inq twat</span>
+                  <span class="toggle-label">Racist</span>
                 </label>
                 <label class="toggle">
                   <input
@@ -69,6 +69,12 @@
 
       <nav id="navbar">
         <div id="filter-buttons" onclick="return filterStudents(this);">
+          <input
+            id="search-bar"
+            placeholder="search..."
+            oninput="return
+          filterStudents(this.parentElement);"
+          />
           <fieldset>
             <legend>Houses</legend>
 
@@ -123,9 +129,10 @@
                 name="girl"
               />
               <div class="toggle-switch"></div>
-              <span class="toggle-label"
-                >Girls <i class="fas fa-venus"></i
-              ></span>
+              <span class="toggle-label">
+                Girls
+                <i class="fas fa-venus"></i>
+              </span>
             </label>
             <label class="toggle">
               <input
@@ -135,55 +142,49 @@
                 name="boy"
               />
               <div class="toggle-switch"></div>
-              <span class="toggle-label">Boys <i class="fas fa-mars"></i></span>
+              <span class="toggle-label">
+                Boys
+                <i class="fas fa-mars"></i>
+              </span>
             </label>
           </fieldset>
-          <legend>Status</legend>
-          <label class="toggle">
-            <input
-              checked
-              class="toggle-checkbox filter"
-              type="checkbox"
-              name="isPrefect"
-            />
-            <div class="toggle-switch"></div>
-            <span class="toggle-label"> Prefects</span>
-          </label>
-          <label class="toggle">
-            <input
-              checked
-              class="toggle-checkbox filter"
-              type="checkbox"
-              name="isRacist"
-            />
-            <div class="toggle-switch"></div>
-            <span class="toggle-label">Racists</span> </label
-          ><label class="toggle">
-            <input
-              checked
-              class="toggle-checkbox filter"
-              type="checkbox"
-              name="isExpelled"
-            />
-            <div class="toggle-switch"></div>
-            <span class="toggle-label">Expelled</span>
-          </label>
+          <fieldset>
+            <legend>Status</legend>
+            <label class="toggle">
+              <input
+                checked
+                class="toggle-checkbox filter"
+                type="checkbox"
+                name="isPrefect"
+              />
+              <div class="toggle-switch"></div>
+              <span class="toggle-label">Prefects</span>
+            </label>
+            <label class="toggle">
+              <input
+                checked
+                class="toggle-checkbox filter"
+                type="checkbox"
+                name="isRacist"
+              />
+              <div class="toggle-switch"></div>
+              <span class="toggle-label">Racists</span>
+            </label>
+            <label class="toggle">
+              <input
+                checked
+                class="toggle-checkbox filter"
+                type="checkbox"
+                name="isExpelled"
+              />
+              <div class="toggle-switch"></div>
+              <span class="toggle-label">Expelled</span>
+            </label>
+          </fieldset>
 
-          <button class="filter" data-filter="all">Show All</button>
-
-          <input
-            id="search-bar"
-            placeholder="search for student..."
-            oninput="return filterStudents(this.parentElement);"
-          />
+          <button class="filter" data-filter="all">show all students</button>
         </div>
-        <!-- <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Students</a></li>
-          <li><a href="#">Houses</a></li>
-          <li><a href="#">Prefects</a></li>
-          <li><a href="#">Inq twats</a></li>
-        </ul> -->
+        <p id="studentCount">0 students currently listed</p>
       </nav>
       <div id="con">
         <table id="studentTable">
@@ -205,7 +206,6 @@
             <!-- table row template will be inserted here by js -->
           </tbody>
         </table>
-        <p id="studentCount">0 students currently listed</p>
       </div>
 
       <template id="table-row-template">
