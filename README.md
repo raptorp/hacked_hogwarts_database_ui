@@ -1,6 +1,7 @@
 TO DO
 
 1. Data Handling:
+
    - [x] Retrieve student data from https://petlatkea.dk/2021/hogwarts/students.json.
    - [x] Clean and process data to extract first, middle, last names, and nicknames.
 
