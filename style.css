@@ -177,16 +177,16 @@ img {
 }
 
 .popup-hufflepuff .card-cover {
-  background-image: url(cover/yellow-small.jpg);
+  background-image: url(cover/yellow-mid.jpg);
 }
 .popup-slytherin .card-cover {
-  background-image: url(cover/green-small.jpg);
+  background-image: url(cover/green-mid.jpg);
 }
 .popup-ravenclaw .card-cover {
-  background-image: url(cover/blue-small.jpg);
+  background-image: url(cover/blue-mid.jpg);
 }
 .popup-gryffindor .card-cover {
-  background-image: url(cover/red-small.jpg);
+  background-image: url(cover/red-mid.jpg);
 }
 
 .card-header {
@@ -534,4 +534,8 @@ fieldset label {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+p {
+  text-transform: capitalize;
 }
