@@ -80,7 +80,7 @@ function cleanData(students, families) {
       gender: gender,
       bloodStatus: bloodStatus,
       isPrefect: false,
-      isRacist: false,
+      isInquisitor: false,
       isExpelled: false,
     };
   });
@@ -142,7 +142,7 @@ function _filterStudents(elem, data) {
       (student.firstName.toLowerCase().includes(search.toLowerCase()) ||
         student.lastName.toLowerCase().includes(search.toLowerCase())) &&
       (student.isPrefect ? filter.includes("isPrefect") : true) &&
-      (student.isRacist ? filter.includes("isRacist") : true) &&
+      (student.isInquisitor ? filter.includes("isInquisitor") : true) &&
       (student.isExpelled ? filter.includes("isExpelled") : true)
   );
 }
@@ -197,9 +197,9 @@ function createTableRows(data) {
       isPrefectDom.textContent = student.isPrefect;
       isPrefectDom.id = `prefect-${student.lastName}-${student.firstName}`;
 
-      let isRacistDom = row.querySelector(".isRacist"); // give each racist cell a unique id so it can be reached in the pop-up
-      isRacistDom.textContent = student.isRacist;
-      isRacistDom.id = `racist-${student.lastName}-${student.firstName}`;
+      let isInquisitorDom = row.querySelector(".isInquisitor"); // give each inquisitor cell a unique id so it can be reached in the pop-up
+      isInquisitorDom.textContent = student.isInquisitor;
+      isInquisitorDom.id = `inquisitor-${student.lastName}-${student.firstName}`;
 
       let isExpelledDom = row.querySelector(".isExpelled"); // give each expelled cell a unique id so it can be reached in the pop-up
       isExpelledDom.textContent = student.isExpelled;
@@ -218,10 +218,10 @@ function createTableRows(data) {
         : "<i class='fa-solid fa-circle-xmark'></i>";
       row.querySelector(".isPrefect").innerHTML = prefectStatus;
 
-      const racistStatus = student.isRacist
+      const inquisitorStatus = student.isInquisitor
         ? "<i class='fa-solid fa-circle-check'></i>"
         : "<i class='fa-solid fa-circle-xmark'></i>";
-      row.querySelector(".isRacist").innerHTML = racistStatus;
+      row.querySelector(".isInquisitor").innerHTML = inquisitorStatus;
 
       const expelledStatus = student.isExpelled
         ? "<i class='fa-solid fa-circle-check'></i>"
@@ -360,31 +360,33 @@ function showPopup(student, row) {
     student.isPrefect = toggleSwitchPrefect.checked;
   });
 
-  // add toggle switch event listener for isRacist
-  const toggleSwitchRacist = clone.querySelector(".toggle-racist-status");
-  toggleSwitchRacist.checked = student.isRacist;
-  toggleSwitchRacist.addEventListener("change", () => {
+  // add toggle switch event listener for isInquisitor
+  const toggleSwitchInquisitor = clone.querySelector(
+    ".toggle-inquisitor-status"
+  );
+  toggleSwitchInquisitor.checked = student.isInquisitor;
+  toggleSwitchInquisitor.addEventListener("change", () => {
     if (student.bloodStatus === "pure-blood") {
-      student.isRacist = toggleSwitchRacist.checked;
-      const statusIcon = student.isRacist
+      student.isInquisitor = toggleSwitchInquisitor.checked;
+      const statusIcon = student.isInquisitor
         ? "<i class='fa-solid fa-circle-check'></i>"
         : "<i class='fa-solid fa-circle-xmark'></i>";
-      const cellIdRacist = `racist-${student.lastName}-${student.firstName}`;
-      document.getElementById(cellIdRacist).innerHTML = statusIcon;
+      const cellIdInquisitor = `inquisitor-${student.lastName}-${student.firstName}`;
+      document.getElementById(cellIdInquisitor).innerHTML = statusIcon;
     } else {
-      // Show the racist dialog box if the student is not a pure-blood
-      const racistDialog = document.getElementById("racist-dialog");
-      racistDialog.style.display = "flex";
+      // Show the inquisitor dialog box if the student is not a pure-blood
+      const inquisitorDialog = document.getElementById("inquisitor-dialog");
+      inquisitorDialog.style.display = "flex";
 
       // Add an event listener to the OK button that hides the dialog box when it's clicked
-      const okButton = racistDialog.querySelector("button");
+      const okButton = inquisitorDialog.querySelector("button");
       okButton.addEventListener("click", () => {
-        racistDialog.style.display = "none";
+        inquisitorDialog.style.display = "none";
       });
 
       // Set the toggle switch back to unchecked and update the student object
-      toggleSwitchRacist.checked = false;
-      student.isRacist = false;
+      toggleSwitchInquisitor.checked = false;
+      student.isInquisitor = false;
     }
   });
 
@@ -483,15 +485,15 @@ function hackTheSystem() {
     house: "slytherin",
     bloodStatus: "mud-blood",
     isPrefect: false,
-    isRacist: false,
+    isInquisitor: false,
     isExpelled: false,
   };
 
-  // Toggle off isRacist switch for all students
+  // Toggle off isInquisitor switch for all students
   cleanedData.forEach((student) => {
-    student.isRacist = false;
-    const cellIdRacist = `racist-${student.lastName}-${student.firstName}`;
-    document.getElementById(cellIdRacist).innerHTML =
+    student.isInquisitor = false;
+    const cellIdInquisitor = `inquisitor-${student.lastName}-${student.firstName}`;
+    document.getElementById(cellIdInquisitor).innerHTML =
       "<i class='fa-solid fa-circle-xmark'></i>";
   });
 

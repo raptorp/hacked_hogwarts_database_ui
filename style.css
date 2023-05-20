@@ -340,7 +340,7 @@ header {
 
 td.gender,
 .isPrefect,
-.isRacist,
+.isInquisitor,
 .isExpelled {
   text-align: center;
 }
@@ -494,7 +494,7 @@ fieldset label {
   font-size: 1.5rem;
 }
 
-#racist-dialog .dialog-content {
+#inquisitor-dialog .dialog-content {
   position: relative;
   display: flex;
   flex-direction: column;

@@ -56,12 +56,12 @@
             </label>
             <label class="toggle">
               <input
-                class="toggle-checkbox toggle-racist-status"
+                class="toggle-checkbox toggle-inquisitor-status"
                 type="checkbox"
-                name="racist"
+                name="inquisitor"
               />
               <div class="toggle-switch"></div>
-              <span class="toggle-label">Racist</span>
+              <span class="toggle-label">Inquisitor</span>
             </label>
             <label class="toggle">
               <input
@@ -174,10 +174,10 @@
                     checked
                     class="toggle-checkbox filter"
                     type="checkbox"
-                    name="isRacist"
+                    name="isInquisitor"
                   />
                   <div class="toggle-switch"></div>
-                  <span class="toggle-label">Racists</span>
+                  <span class="toggle-label">Inquisitors</span>
                 </label>
                 <label class="toggle">
                   <input
@@ -213,7 +213,9 @@
                   <th data-sort-direction="asc" data-sort="isPrefect">
                     Prefect
                   </th>
-                  <th data-sort-direction="asc" data-sort="racist">Racist</th>
+                  <th data-sort-direction="asc" data-sort="inquisitor">
+                    Inquisitor
+                  </th>
                   <th data-sort-direction="asc" data-sort="expelled">
                     Expelled
                   </th>
@@ -233,7 +235,7 @@
               <td class="first-name"></td>
               <td class="gender"></td>
               <td class="isPrefect"></td>
-              <td class="isRacist"></td>
+              <td class="isInquisitor"></td>
               <td class="isExpelled"></td>
             </tr>
           </template>
@@ -246,10 +248,10 @@
 
     <script defer src="script.js"></script>
 
-    <div id="racist-dialog" class="dialog-box">
+    <div id="inquisitor-dialog" class="dialog-box">
       <div class="dialog-content">
         <button><i class="fa-solid fa-xmark"></i></button>
-        <p>Only pure-blood students can be added as racists</p>
+        <p>Only pure-blood students can be added as inquisitors</p>
       </div>
     </div>
 
